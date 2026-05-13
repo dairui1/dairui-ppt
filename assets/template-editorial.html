@@ -1,0 +1,635 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>[必填] 替换为编辑风 PPT 标题 · Editorial Deck Title</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Work+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" />
+    <style>
+:root {
+  --bg-cream: #f5f3ee;
+  --bg-deep: #1a1a1a;
+  --ink: #1a1a1a;
+  --ink-soft: #2d2926;
+  --ink-mid: #555;
+  --rule: #c8c0b0;
+  --accent-warm: #e8d4c0;
+  --accent-ink: #b04a2f;
+
+  --serif: "Fraunces", "Source Serif 4", Georgia, serif;
+  --sans:  "Work Sans", "Inter Tight", system-ui, sans-serif;
+  --mono:  "JetBrains Mono", "SF Mono", Consolas, monospace;
+
+  --pad-x: clamp(2rem, 6vw, 5rem);
+  --pad-y: clamp(1.5rem, 4vh, 3rem);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-cream);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* === Deck container · 横向滑动 === */
+.deck {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.slides {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide {
+  flex: 0 0 100vw;
+  height: 100vh;
+  position: relative;
+  padding: var(--pad-y) var(--pad-x);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.slide.dark {
+  background: var(--bg-deep);
+  color: var(--bg-cream);
+}
+
+/* === 元数据条 · 顶部 / 底部 === */
+.chrome {
+  position: absolute;
+  top: clamp(1rem, 2.5vh, 2rem);
+  left: var(--pad-x);
+  right: var(--pad-x);
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: clamp(0.65rem, 0.95vw, 0.8rem);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+}
+.slide.dark .chrome { color: rgba(245, 243, 238, 0.55); }
+
+.foot {
+  position: absolute;
+  bottom: clamp(1rem, 2.5vh, 2rem);
+  left: var(--pad-x);
+  right: var(--pad-x);
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: clamp(0.6rem, 0.85vw, 0.72rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+}
+.slide.dark .foot { color: rgba(245, 243, 238, 0.5); }
+
+/* === 字体层级 === */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: clamp(0.68rem, 0.95vw, 0.85rem);
+  font-weight: 500;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  margin-bottom: clamp(0.8rem, 1.5vh, 1.4rem);
+}
+.slide.dark .eyebrow { color: var(--accent-warm); }
+
+.h-hero {
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: clamp(3rem, 8.5vw, 7rem);
+  font-variation-settings: "opsz" 144;
+  line-height: 0.92;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+}
+.slide.dark .h-hero { color: var(--bg-cream); }
+
+.h-display {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 5.8vw, 4.5rem);
+  font-variation-settings: "opsz" 100;
+  line-height: 1.02;
+  letter-spacing: -0.018em;
+  color: var(--ink);
+}
+.slide.dark .h-display { color: var(--bg-cream); }
+
+.h-section {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 3.6vw, 2.8rem);
+  font-variation-settings: "opsz" 48;
+  line-height: 1.1;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+  margin-bottom: clamp(0.6rem, 1.2vh, 1rem);
+}
+
+.h-sub {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.1rem, 1.9vw, 1.5rem);
+  font-variation-settings: "opsz" 36;
+  line-height: 1.3;
+  color: var(--ink-mid);
+  margin-bottom: clamp(1rem, 2vh, 1.5rem);
+}
+
+.lead {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: clamp(0.95rem, 1.3vw, 1.18rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 56ch;
+}
+.slide.dark .lead { color: rgba(245, 243, 238, 0.85); }
+
+.body-text {
+  font-family: var(--sans);
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+
+.dropcap::first-letter {
+  font-family: var(--serif);
+  font-weight: 900;
+  font-size: 4.2em;
+  float: left;
+  line-height: 0.85;
+  margin-right: 0.08em;
+  padding-top: 0.04em;
+  color: var(--accent-ink);
+}
+
+.pullquote {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  line-height: 1.25;
+  color: var(--ink);
+  position: relative;
+  padding-left: 0.6em;
+  border-left: 3px solid var(--accent-ink);
+}
+
+/* === 抽象几何装饰（无插画） === */
+.deco-circle {
+  position: absolute;
+  width: clamp(120px, 18vw, 240px);
+  height: clamp(120px, 18vw, 240px);
+  border: 2px solid var(--ink);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.slide.dark .deco-circle { border-color: var(--accent-warm); }
+
+.deco-dot {
+  position: absolute;
+  width: clamp(8px, 1.2vw, 14px);
+  height: clamp(8px, 1.2vw, 14px);
+  background: var(--accent-ink);
+  border-radius: 50%;
+  pointer-events: none;
+}
+
+.deco-rule {
+  position: absolute;
+  height: 2px;
+  background: var(--ink);
+  pointer-events: none;
+}
+
+.deco-block {
+  position: absolute;
+  background: var(--accent-warm);
+  pointer-events: none;
+}
+
+/* === 布局骨架 === */
+.cover {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  height: 100%;
+  align-items: end;
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: start;
+  flex: 1;
+}
+
+.grid-2-7 {
+  display: grid;
+  grid-template-columns: 1fr 2.5fr;
+  gap: clamp(2rem, 4vw, 4rem);
+  flex: 1;
+  align-items: start;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.5rem, 3vw, 3rem);
+  flex: 1;
+}
+
+.column-stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.8rem, 1.6vh, 1.5rem);
+}
+
+.feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.6rem, 1.2vh, 1rem);
+}
+.feature-list li {
+  font-family: var(--sans);
+  font-size: clamp(0.9rem, 1.15vw, 1.05rem);
+  line-height: 1.5;
+  padding-left: 1.6em;
+  position: relative;
+  color: var(--ink-soft);
+}
+.feature-list li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.8em;
+  height: 2px;
+  background: var(--accent-ink);
+}
+.slide.dark .feature-list li { color: rgba(245, 243, 238, 0.85); }
+
+.stat-card {
+  border: 2px solid var(--ink);
+  padding: clamp(1.2rem, 2.5vh, 2rem) clamp(1rem, 2vw, 1.8rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.4rem, 0.8vh, 0.6rem);
+}
+.stat-number {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(2.2rem, 4.5vw, 3.6rem);
+  font-variation-settings: "opsz" 48;
+  line-height: 0.95;
+  letter-spacing: -0.02em;
+  color: var(--accent-ink);
+}
+.stat-label {
+  font-family: var(--mono);
+  font-size: clamp(0.7rem, 0.95vw, 0.85rem);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+}
+.stat-note {
+  font-family: var(--sans);
+  font-size: clamp(0.78rem, 1vw, 0.92rem);
+  line-height: 1.45;
+  color: var(--ink-soft);
+}
+
+.cta-box {
+  border: 3px solid var(--ink);
+  padding: clamp(1rem, 2vh, 1.6rem) clamp(1.5rem, 3vw, 2.4rem);
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.6em;
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+  letter-spacing: -0.01em;
+  background: var(--bg-cream);
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+.cta-box:hover { background: var(--ink); color: var(--bg-cream); }
+.cta-box .arrow { font-family: var(--sans); font-weight: 500; font-size: 0.9em; }
+
+/* === 翻页指示 / 进度 === */
+.nav-hint {
+  position: fixed;
+  bottom: clamp(0.6rem, 1.5vh, 1rem);
+  right: clamp(1rem, 2vw, 2rem);
+  font-family: var(--mono);
+  font-size: clamp(0.6rem, 0.78vw, 0.7rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-mid);
+  z-index: 50;
+}
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: var(--accent-ink);
+  width: 0;
+  transition: width 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 60;
+}
+
+/* === 入场动效 === */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.slide.active .reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+.slide.active .reveal:nth-child(1) { transition-delay: 0.1s; }
+.slide.active .reveal:nth-child(2) { transition-delay: 0.22s; }
+.slide.active .reveal:nth-child(3) { transition-delay: 0.34s; }
+.slide.active .reveal:nth-child(4) { transition-delay: 0.46s; }
+.slide.active .reveal:nth-child(5) { transition-delay: 0.58s; }
+.slide.active .reveal:nth-child(6) { transition-delay: 0.7s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { transition-duration: 0.2s; }
+  .slides { transition-duration: 0.2s; }
+}
+    </style>
+  </head>
+  <body>
+    <div class="progress" id="progress"></div>
+    <div class="deck" id="deck">
+      <div class="slides" id="slides">
+
+        <!-- ============ 封面 ============ -->
+        <section class="slide active">
+          <div class="chrome">
+            <span>Vol.01 · 2026</span>
+            <span>[必填] 主题领域</span>
+          </div>
+
+          <div class="deco-circle" style="top: 18%; right: 8%;"></div>
+          <div class="deco-dot" style="top: 32%; right: 22%;"></div>
+          <div class="deco-rule" style="top: 50%; right: 12%; width: clamp(80px, 12vw, 160px);"></div>
+
+          <div class="cover">
+            <div></div>
+            <div>
+              <span class="eyebrow reveal">A Field Note · {{副标题或栏目}}</span>
+              <h1 class="h-hero reveal" style="margin-bottom: clamp(1.2rem, 2.4vh, 2rem);">
+                {{主标题<br>可以两行}}
+              </h1>
+              <p class="lead reveal" style="max-width: 60ch;">
+                {{一两句引言，引出整份 deck 的核心论点。编辑风偏好"对话感"和"有点态度"的写法，不要写成 marketing 复制粘贴。}}
+              </p>
+            </div>
+          </div>
+
+          <div class="foot">
+            <span>{{作者 · 单位}}</span>
+            <span>01 / 06</span>
+          </div>
+        </section>
+
+        <!-- ============ 章节封 · 大字 + 几何装饰 ============ -->
+        <section class="slide">
+          <div class="chrome">
+            <span>Section 01</span>
+            <span>{{章节副标}}</span>
+          </div>
+
+          <div class="deco-block" style="top: 28%; left: 8%; width: clamp(100px, 14vw, 180px); height: clamp(100px, 14vw, 180px);"></div>
+          <div class="deco-dot" style="top: 38%; left: 22%;"></div>
+
+          <div style="display: flex; flex-direction: column; justify-content: center; flex: 1; padding-left: clamp(2rem, 8vw, 6rem);">
+            <span class="eyebrow reveal">— 01</span>
+            <h2 class="h-display reveal">
+              {{章节大标题}}
+            </h2>
+            <p class="h-sub reveal" style="margin-top: clamp(1rem, 2vh, 1.5rem);">
+              {{斜体衬线副标 · 一句话点题}}
+            </p>
+          </div>
+
+          <div class="foot">
+            <span>{{项目名 / 期刊名}}</span>
+            <span>02 / 06</span>
+          </div>
+        </section>
+
+        <!-- ============ 正文 · drop cap + 列表 ============ -->
+        <section class="slide">
+          <div class="chrome">
+            <span>01 · {{章节名}}</span>
+            <span>{{页面副标}}</span>
+          </div>
+
+          <span class="eyebrow reveal">关键观点</span>
+          <h2 class="h-section reveal">{{页面标题}}</h2>
+          <p class="h-sub reveal">{{副标题，斜体衬线}}</p>
+
+          <div class="grid-2" style="margin-top: clamp(1.5rem, 3vh, 2.5rem);">
+            <p class="body-text dropcap reveal">
+              这里写一段较长的引导文，编辑风的灵魂是有点"读 New Yorker / Monocle"的感觉。第一个字母会自动做 drop cap 处理。保持有自己的判断和观察，不要写成 SaaS 营销文案。一段大约 80-120 字最合适。
+            </p>
+            <ul class="feature-list reveal">
+              <li>{{要点一 · 一句话陈述</li>
+              <li>{{要点二 · 一句话陈述</li>
+              <li>{{要点三 · 一句话陈述</li>
+              <li>{{要点四 · 一句话陈述</li>
+            </ul>
+          </div>
+
+          <div class="foot">
+            <span>{{作者}}</span>
+            <span>03 / 06</span>
+          </div>
+        </section>
+
+        <!-- ============ 数据三栏 · 衬线大数字 ============ -->
+        <section class="slide">
+          <div class="chrome">
+            <span>02 · {{章节名}}</span>
+            <span>By the Numbers</span>
+          </div>
+
+          <span class="eyebrow reveal">数据 · 一眼能看到的事实</span>
+          <h2 class="h-section reveal">{{为什么这些数字重要}}</h2>
+
+          <div class="grid-3" style="margin-top: clamp(1.5rem, 3vh, 2.5rem);">
+            <div class="stat-card reveal">
+              <span class="stat-label">指标 A</span>
+              <span class="stat-number">87<span style="font-size: 0.5em; color: var(--ink-mid);">%</span></span>
+              <p class="stat-note">{{说明这数字在什么场景下重要}}</p>
+            </div>
+            <div class="stat-card reveal">
+              <span class="stat-label">指标 B</span>
+              <span class="stat-number">2.4<span style="font-size: 0.5em; color: var(--ink-mid);">×</span></span>
+              <p class="stat-note">{{对比基线、增长来源、归因}}</p>
+            </div>
+            <div class="stat-card reveal">
+              <span class="stat-label">指标 C</span>
+              <span class="stat-number">12<span style="font-size: 0.5em; color: var(--ink-mid);">个月</span></span>
+              <p class="stat-note">{{时间窗口、采样口径、变量}}</p>
+            </div>
+          </div>
+
+          <div class="foot">
+            <span>{{数据来源 · YYYY.MM}}</span>
+            <span>04 / 06</span>
+          </div>
+        </section>
+
+        <!-- ============ Pull Quote · 大引述（dark 主题） ============ -->
+        <section class="slide dark">
+          <div class="chrome">
+            <span>Pull Quote</span>
+            <span>—</span>
+          </div>
+
+          <div class="deco-circle" style="top: 16%; right: 8%; border-color: var(--accent-warm);"></div>
+          <div class="deco-dot" style="top: 30%; right: 20%; background: var(--accent-warm);"></div>
+
+          <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; max-width: 80ch;">
+            <span class="eyebrow reveal">受访者 · {{身份}}</span>
+            <p class="pullquote reveal" style="color: var(--bg-cream); border-left-color: var(--accent-warm); margin-top: clamp(1rem, 2vh, 1.5rem);">
+              {{这里放一句金句、采访摘录或最有冲击力的判断。让大字本身做主角，不要叠装饰。约 30-50 字最有力。}}
+            </p>
+            <p class="lead reveal" style="margin-top: clamp(1.5rem, 3vh, 2.5rem); color: rgba(245, 243, 238, 0.7);">
+              {{可选：在引述下方补一句注解 / 时间 / 上下文}}
+            </p>
+          </div>
+
+          <div class="foot">
+            <span>{{对话记录于 · YYYY.MM.DD}}</span>
+            <span>05 / 06</span>
+          </div>
+        </section>
+
+        <!-- ============ 收束 · CTA + 联系方式 ============ -->
+        <section class="slide">
+          <div class="chrome">
+            <span>End · Vol.01</span>
+            <span>Take Action</span>
+          </div>
+
+          <div class="deco-rule" style="top: 22%; left: 8%; width: clamp(120px, 16vw, 220px);"></div>
+          <div class="deco-circle" style="bottom: 18%; right: 8%; width: clamp(80px, 12vw, 160px); height: clamp(80px, 12vw, 160px);"></div>
+
+          <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; gap: clamp(1.5rem, 3vh, 2.5rem);">
+            <span class="eyebrow reveal">如果这份 deck 让你有所思考</span>
+            <h2 class="h-display reveal">下一步 · 该<br>怎么做？</h2>
+            <p class="lead reveal" style="max-width: 60ch;">
+              {{写一两句行动建议。编辑风的收尾不喜欢大白话 CTA，可以是一个开放性的问题、一个邀请，或者一段冷峻的判断。}}
+            </p>
+            <div class="reveal" style="margin-top: clamp(0.8rem, 1.6vh, 1.4rem);">
+              <a class="cta-box" href="#">{{联系方式 / 行动}} <span class="arrow">→</span></a>
+            </div>
+          </div>
+
+          <div class="foot">
+            <span>{{联系邮箱 · @handle}}</span>
+            <span>06 / 06</span>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="nav-hint">← → 翻页 · 滚轮 / 触屏滑动 · ESC 索引</div>
+
+    <script>
+      const slides = document.querySelectorAll('.slide');
+      const slidesContainer = document.getElementById('slides');
+      const progress = document.getElementById('progress');
+      let current = 0;
+      let isAnimating = false;
+
+      function go(index) {
+        if (isAnimating) return;
+        const next = Math.max(0, Math.min(slides.length - 1, index));
+        if (next === current) return;
+        isAnimating = true;
+        slides[current].classList.remove('active');
+        current = next;
+        slides[current].classList.add('active');
+        slidesContainer.style.transform = `translateX(-${current * 100}vw)`;
+        progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+        setTimeout(() => { isAnimating = false; }, 720);
+      }
+
+      // 初始 progress
+      progress.style.width = `${(1 / slides.length) * 100}%`;
+
+      // 键盘
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+          e.preventDefault();
+          go(current + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault();
+          go(current - 1);
+        } else if (e.key === 'Home') {
+          go(0);
+        } else if (e.key === 'End') {
+          go(slides.length - 1);
+        }
+      });
+
+      // 滚轮
+      let wheelBuffer = 0;
+      let wheelTimer = null;
+      window.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        wheelBuffer += e.deltaY;
+        clearTimeout(wheelTimer);
+        if (Math.abs(wheelBuffer) > 80) {
+          go(current + (wheelBuffer > 0 ? 1 : -1));
+          wheelBuffer = 0;
+        }
+        wheelTimer = setTimeout(() => { wheelBuffer = 0; }, 200);
+      }, { passive: false });
+
+      // 触屏
+      let touchStartX = 0;
+      window.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+      }, { passive: true });
+      window.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) go(current + (dx < 0 ? 1 : -1));
+      });
+    </script>
+  </body>
+</html>

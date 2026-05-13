@@ -1,0 +1,639 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>[必填] 替换为笔记本风 PPT 标题 · Notebook Deck Title</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=DM+Sans:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+    <style>
+:root {
+  --bg-outer:    #2d2d2d;
+  --bg-page:     #f8f6f1;
+  --bg-page-tint:#efece4;
+  --ink:         #1a1a1a;
+  --ink-soft:    #2d2926;
+  --ink-mid:     #555;
+  --ink-mute:    #8c887e;
+  --rule:        #d9d4c5;
+
+  --tab-1: #98d4bb; /* mint */
+  --tab-2: #c7b8ea; /* lavender */
+  --tab-3: #f4b8c5; /* pink */
+  --tab-4: #a8d8ea; /* sky */
+  --tab-5: #ffe6a7; /* cream */
+  --tab-6: #f5b87a; /* peach */
+
+  --serif: "Bodoni Moda", "Source Serif 4", Georgia, serif;
+  --sans:  "DM Sans", "Inter Tight", system-ui, sans-serif;
+  --mono:  "JetBrains Mono", "SF Mono", Consolas, monospace;
+
+  --page-pad-x: clamp(2.5rem, 5vw, 4.5rem);
+  --page-pad-y: clamp(2rem, 4vh, 3rem);
+  --page-radius: clamp(8px, 1.2vw, 14px);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-outer);
+  color: var(--ink);
+  font-family: var(--sans);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+.deck {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.slides {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide {
+  flex: 0 0 100vw;
+  height: 100vh;
+  position: relative;
+  padding: clamp(1.4rem, 3vh, 2.4rem) clamp(1.5rem, 3vw, 3rem);
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+}
+
+/* === 纸卡 · 主容器 === */
+.page {
+  position: relative;
+  width: 100%;
+  max-width: min(1400px, 92vw);
+  height: 100%;
+  background: var(--bg-page);
+  border-radius: var(--page-radius);
+  box-shadow:
+    0 10px 32px rgba(0, 0, 0, 0.3),
+    0 2px 8px rgba(0, 0, 0, 0.2);
+  display: grid;
+  grid-template-columns: clamp(36px, 4vw, 60px) 1fr clamp(36px, 4vw, 60px);
+  overflow: hidden;
+}
+
+/* === 左侧装订孔 === */
+.binder {
+  position: relative;
+  border-right: 1px dashed var(--rule);
+  background: var(--bg-page-tint);
+}
+.binder::before,
+.binder::after,
+.binder span {
+  content: '';
+  position: absolute;
+  left: 50%;
+  width: clamp(10px, 1.1vw, 16px);
+  height: clamp(10px, 1.1vw, 16px);
+  background: var(--bg-outer);
+  border-radius: 50%;
+  transform: translateX(-50%);
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.5);
+}
+.binder::before { top: 20%; }
+.binder::after  { bottom: 20%; }
+.binder span    { top: 50%; transform: translate(-50%, -50%); }
+
+/* === 主内容区 === */
+.content {
+  position: relative;
+  padding: var(--page-pad-y) var(--page-pad-x);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* === 右侧彩色 tab 边 === */
+.tabs {
+  position: relative;
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+}
+.tab {
+  position: relative;
+  background: var(--bg-page-tint);
+  border-left: 1px solid var(--rule);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: filter 0.25s ease;
+}
+.tab[data-i="0"] { background: var(--tab-1); }
+.tab[data-i="1"] { background: var(--tab-2); }
+.tab[data-i="2"] { background: var(--tab-3); }
+.tab[data-i="3"] { background: var(--tab-4); }
+.tab[data-i="4"] { background: var(--tab-5); }
+.tab[data-i="5"] { background: var(--tab-6); }
+.tab:hover { filter: brightness(1.06); }
+.tab.active { filter: brightness(1.0); }
+.tab:not(.active) { filter: brightness(0.92) saturate(0.7); }
+
+.tab span {
+  font-family: var(--mono);
+  font-size: clamp(0.5rem, 0.85vw, 0.78rem);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+
+/* === 字体层级 === */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: clamp(0.7rem, 0.95vw, 0.84rem);
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+  margin-bottom: clamp(0.8rem, 1.6vh, 1.4rem);
+}
+
+.h-hero {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(3rem, 7.5vw, 6rem);
+  font-variation-settings: "opsz" 96;
+  line-height: 0.98;
+  letter-spacing: -0.012em;
+  color: var(--ink);
+}
+
+.h-display {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-variation-settings: "opsz" 72;
+  line-height: 1.05;
+  letter-spacing: -0.008em;
+  color: var(--ink);
+}
+
+.h-section {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+  font-variation-settings: "opsz" 36;
+  line-height: 1.12;
+  letter-spacing: -0.004em;
+  color: var(--ink);
+  margin-bottom: clamp(0.8rem, 1.4vh, 1.2rem);
+}
+
+.h-sub {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(1.1rem, 1.85vw, 1.45rem);
+  line-height: 1.3;
+  color: var(--ink-mid);
+  margin-bottom: clamp(1rem, 2vh, 1.5rem);
+}
+
+.lead {
+  font-family: var(--sans);
+  font-size: clamp(0.95rem, 1.3vw, 1.16rem);
+  line-height: 1.55;
+  color: var(--ink-soft);
+  max-width: 58ch;
+}
+
+.body-text {
+  font-family: var(--sans);
+  font-size: clamp(0.88rem, 1.1vw, 1.02rem);
+  line-height: 1.65;
+  color: var(--ink-soft);
+}
+
+.body-text strong { font-weight: 700; color: var(--ink); }
+
+.handwritten {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ink-mid);
+}
+
+/* === Note / bullet 列表 === */
+.note-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.6rem, 1.2vh, 1rem);
+}
+.note-list li {
+  font-family: var(--sans);
+  font-size: clamp(0.92rem, 1.18vw, 1.08rem);
+  line-height: 1.5;
+  padding-left: 2em;
+  position: relative;
+  color: var(--ink-soft);
+}
+.note-list li::before {
+  content: counter(li-num, decimal-leading-zero);
+  counter-increment: li-num;
+  position: absolute;
+  left: 0;
+  top: 0.1em;
+  font-family: var(--mono);
+  font-size: 0.78em;
+  color: var(--ink-mute);
+  letter-spacing: 0.05em;
+}
+.note-list { counter-reset: li-num; }
+
+/* === Sticky note 卡片 === */
+.sticky-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1rem, 2vw, 1.8rem);
+  flex: 1;
+  align-content: center;
+}
+.sticky {
+  position: relative;
+  padding: clamp(1.2rem, 2.5vh, 2rem) clamp(1rem, 2vw, 1.6rem);
+  border-radius: 4px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.5rem, 1vh, 0.8rem);
+  transform: rotate(-0.6deg);
+  transition: transform 0.2s ease;
+}
+.sticky:nth-child(2) { transform: rotate(0.4deg); }
+.sticky:nth-child(3) { transform: rotate(-0.3deg); }
+.sticky:hover { transform: rotate(0) translateY(-3px); }
+.sticky.color-1 { background: var(--tab-1); }
+.sticky.color-2 { background: var(--tab-2); }
+.sticky.color-3 { background: var(--tab-3); }
+.sticky.color-4 { background: var(--tab-4); }
+.sticky.color-5 { background: var(--tab-5); }
+.sticky-label {
+  font-family: var(--mono);
+  font-size: clamp(0.7rem, 0.9vw, 0.8rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(26, 26, 26, 0.7);
+}
+.sticky-title {
+  font-family: var(--serif);
+  font-weight: 700;
+  font-size: clamp(1.3rem, 2.4vw, 2rem);
+  font-variation-settings: "opsz" 36;
+  line-height: 1.1;
+  color: var(--ink);
+}
+.sticky-note {
+  font-family: var(--sans);
+  font-size: clamp(0.84rem, 1.05vw, 0.95rem);
+  line-height: 1.5;
+  color: var(--ink-soft);
+}
+
+/* === Underline accent (笔记本下划线感) === */
+.ul-accent {
+  display: inline-block;
+  background-image: linear-gradient(transparent 70%, currentColor 70%, currentColor 86%, transparent 86%);
+  background-size: 100% 100%;
+}
+
+/* === 元数据 / 页脚 === */
+.foot {
+  margin-top: auto;
+  padding-top: clamp(0.8rem, 1.6vh, 1.2rem);
+  border-top: 1px dashed var(--rule);
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: clamp(0.65rem, 0.85vw, 0.74rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--ink-mute);
+}
+
+/* === 翻页提示 === */
+.nav-hint {
+  position: fixed;
+  bottom: clamp(0.6rem, 1.4vh, 1rem);
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: clamp(0.6rem, 0.78vw, 0.7rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  z-index: 50;
+}
+
+/* === 入场动效 === */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.slide.active .reveal {
+  opacity: 1;
+  transform: translateY(0);
+}
+.slide.active .reveal:nth-child(1) { transition-delay: 0.12s; }
+.slide.active .reveal:nth-child(2) { transition-delay: 0.24s; }
+.slide.active .reveal:nth-child(3) { transition-delay: 0.36s; }
+.slide.active .reveal:nth-child(4) { transition-delay: 0.48s; }
+.slide.active .reveal:nth-child(5) { transition-delay: 0.6s; }
+.slide.active .reveal:nth-child(6) { transition-delay: 0.72s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .slides { transition-duration: 0.2s; }
+  .sticky { transform: none !important; }
+}
+    </style>
+  </head>
+  <body>
+    <div class="deck" id="deck">
+      <div class="slides" id="slides">
+
+        <!-- 封面 -->
+        <section class="slide active">
+          <div class="page">
+            <div class="binder"><span></span></div>
+            <div class="content">
+              <div class="eyebrow reveal">{{Volume 01 · Field Notebook}}</div>
+              <h1 class="h-hero reveal" style="margin: clamp(1rem, 2vh, 1.6rem) 0 clamp(1.2rem, 2.4vh, 1.8rem);">
+                {{主标题<br>可以两行}}
+              </h1>
+              <p class="h-sub reveal">{{斜体衬线副标 · 一句话点题}}</p>
+              <p class="lead reveal" style="margin-top: clamp(1rem, 2vh, 1.5rem);">
+                {{一两句引言。笔记本风偏好"翻开一本旧本子读到的内容"的感觉，亲切有手感。}}
+              </p>
+              <div style="flex: 1;"></div>
+              <div class="handwritten reveal" style="font-size: clamp(1rem, 1.4vw, 1.2rem);">
+                — {{作者 · 时间地点}}
+              </div>
+              <div class="foot reveal">
+                <span>{{单位 / 期刊}}</span>
+                <span>01 / 06</span>
+              </div>
+            </div>
+            <div class="tabs">
+              <div class="tab active" data-i="0"><span>Cover</span></div>
+              <div class="tab" data-i="1"><span>Ch. 01</span></div>
+              <div class="tab" data-i="2"><span>Notes</span></div>
+              <div class="tab" data-i="3"><span>Data</span></div>
+              <div class="tab" data-i="4"><span>Pin</span></div>
+              <div class="tab" data-i="5"><span>End</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 章节封 -->
+        <section class="slide">
+          <div class="page">
+            <div class="binder"><span></span></div>
+            <div class="content">
+              <div class="eyebrow reveal">— Chapter 01 / {{章节副标}}</div>
+              <h2 class="h-display reveal" style="margin-top: clamp(1rem, 2vh, 1.6rem);">
+                <span class="ul-accent" style="color: var(--tab-1);">{{章节大标题}}</span>
+              </h2>
+              <p class="h-sub reveal" style="margin-top: clamp(1.4rem, 2.8vh, 2rem);">
+                {{斜体衬线副标 · 第一行}}<br>{{斜体衬线副标 · 第二行}}
+              </p>
+              <p class="lead reveal" style="margin-top: clamp(1.4rem, 2.8vh, 2rem);">
+                {{这一章要讲什么 · 60-100 字引论}}
+              </p>
+              <div class="foot reveal">
+                <span>{{项目名}}</span>
+                <span>02 / 06</span>
+              </div>
+            </div>
+            <div class="tabs">
+              <div class="tab" data-i="0"><span>Cover</span></div>
+              <div class="tab active" data-i="1"><span>Ch. 01</span></div>
+              <div class="tab" data-i="2"><span>Notes</span></div>
+              <div class="tab" data-i="3"><span>Data</span></div>
+              <div class="tab" data-i="4"><span>Pin</span></div>
+              <div class="tab" data-i="5"><span>End</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 编号笔记列表 -->
+        <section class="slide">
+          <div class="page">
+            <div class="binder"><span></span></div>
+            <div class="content">
+              <span class="eyebrow reveal">Notes · 01-05</span>
+              <h2 class="h-section reveal">{{论点 · 一页要传达的核心}}</h2>
+              <p class="h-sub reveal">{{斜体副标 · 引出列表的角度}}</p>
+
+              <ul class="note-list reveal" style="margin-top: clamp(1rem, 2vh, 1.5rem);">
+                <li><strong>{{要点一标题}}。</strong>{{一句话陈述，可以稍长，约 30-50 字。}}</li>
+                <li><strong>{{要点二标题}}。</strong>{{一句话陈述。}}</li>
+                <li><strong>{{要点三标题}}。</strong>{{一句话陈述。}}</li>
+                <li><strong>{{要点四标题}}。</strong>{{一句话陈述。}}</li>
+                <li><strong>{{要点五标题}}。</strong>{{一句话陈述。}}</li>
+              </ul>
+
+              <p class="handwritten reveal" style="margin-top: clamp(1.4rem, 2.8vh, 2rem); font-size: clamp(0.95rem, 1.25vw, 1.1rem);">
+                {{底部手写注脚 · 比如来源 / 一句反思}}
+              </p>
+
+              <div class="foot reveal">
+                <span>{{作者首字母 · 日期}}</span>
+                <span>03 / 06</span>
+              </div>
+            </div>
+            <div class="tabs">
+              <div class="tab" data-i="0"><span>Cover</span></div>
+              <div class="tab" data-i="1"><span>Ch. 01</span></div>
+              <div class="tab active" data-i="2"><span>Notes</span></div>
+              <div class="tab" data-i="3"><span>Data</span></div>
+              <div class="tab" data-i="4"><span>Pin</span></div>
+              <div class="tab" data-i="5"><span>End</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 数据 sticky 网格 -->
+        <section class="slide">
+          <div class="page">
+            <div class="binder"><span></span></div>
+            <div class="content">
+              <span class="eyebrow reveal">Data · By the Numbers</span>
+              <h2 class="h-section reveal">{{为什么这些数字值得贴上来}}</h2>
+
+              <div class="sticky-grid reveal" style="margin-top: clamp(1.2rem, 2.4vh, 2rem);">
+                <div class="sticky color-3">
+                  <span class="sticky-label">Metric A</span>
+                  <span class="sticky-title">87<span style="font-size: 0.55em;">%</span></span>
+                  <p class="sticky-note">{{说明这个数字代表什么场景}}</p>
+                </div>
+                <div class="sticky color-1">
+                  <span class="sticky-label">Metric B</span>
+                  <span class="sticky-title">2.4<span style="font-size: 0.55em;">×</span></span>
+                  <p class="sticky-note">{{对比基线 · 时间窗口}}</p>
+                </div>
+                <div class="sticky color-4">
+                  <span class="sticky-label">Metric C</span>
+                  <span class="sticky-title">12<span style="font-size: 0.55em;">月</span></span>
+                  <p class="sticky-note">{{阶段说明 · 采样口径}}</p>
+                </div>
+              </div>
+
+              <div class="foot reveal">
+                <span>{{数据来源 · YYYY.MM}}</span>
+                <span>04 / 06</span>
+              </div>
+            </div>
+            <div class="tabs">
+              <div class="tab" data-i="0"><span>Cover</span></div>
+              <div class="tab" data-i="1"><span>Ch. 01</span></div>
+              <div class="tab" data-i="2"><span>Notes</span></div>
+              <div class="tab active" data-i="3"><span>Data</span></div>
+              <div class="tab" data-i="4"><span>Pin</span></div>
+              <div class="tab" data-i="5"><span>End</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Pin · 大引述 / 摘录 -->
+        <section class="slide">
+          <div class="page">
+            <div class="binder"><span></span></div>
+            <div class="content" style="justify-content: center;">
+              <span class="eyebrow reveal">Pinned · A note worth keeping</span>
+              <p class="h-display reveal" style="margin-top: clamp(1.2rem, 2.4vh, 1.8rem); max-width: 22ch;">
+                "<span class="ul-accent" style="color: var(--tab-2);">{{摘录原文 · 30-50 字最有力}}</span>"
+              </p>
+              <p class="handwritten reveal" style="margin-top: clamp(1.4rem, 2.8vh, 2rem); font-size: clamp(1.05rem, 1.5vw, 1.3rem);">
+                — {{出处 · 受访者 · 文献}}
+              </p>
+              <div class="foot reveal" style="margin-top: auto;">
+                <span>{{记录时间 · 地点}}</span>
+                <span>05 / 06</span>
+              </div>
+            </div>
+            <div class="tabs">
+              <div class="tab" data-i="0"><span>Cover</span></div>
+              <div class="tab" data-i="1"><span>Ch. 01</span></div>
+              <div class="tab" data-i="2"><span>Notes</span></div>
+              <div class="tab" data-i="3"><span>Data</span></div>
+              <div class="tab active" data-i="4"><span>Pin</span></div>
+              <div class="tab" data-i="5"><span>End</span></div>
+            </div>
+          </div>
+        </section>
+
+        <!-- 收束 -->
+        <section class="slide">
+          <div class="page">
+            <div class="binder"><span></span></div>
+            <div class="content" style="justify-content: center;">
+              <span class="eyebrow reveal">End of Volume 01</span>
+              <h2 class="h-display reveal" style="margin-top: clamp(1rem, 2vh, 1.6rem);">
+                {{收束句第一行}}<br>
+                <span class="ul-accent" style="color: var(--tab-5);">{{第二行 · 强调</span>}}
+              </h2>
+              <p class="lead reveal" style="margin-top: clamp(1.4rem, 2.8vh, 2rem);">
+                {{一段开放式邀请 · 30-60 字。可以是"如果你也在记类似的笔记，欢迎告诉我"。}}
+              </p>
+              <p class="handwritten reveal" style="margin-top: clamp(1.4rem, 2.8vh, 2rem); font-size: clamp(1.05rem, 1.5vw, 1.3rem);">
+                — {{作者签名 · 邮箱}}
+              </p>
+              <div class="foot reveal" style="margin-top: auto;">
+                <span>{{下次见 · Vol.02}}</span>
+                <span>06 / 06</span>
+              </div>
+            </div>
+            <div class="tabs">
+              <div class="tab" data-i="0"><span>Cover</span></div>
+              <div class="tab" data-i="1"><span>Ch. 01</span></div>
+              <div class="tab" data-i="2"><span>Notes</span></div>
+              <div class="tab" data-i="3"><span>Data</span></div>
+              <div class="tab" data-i="4"><span>Pin</span></div>
+              <div class="tab active" data-i="5"><span>End</span></div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="nav-hint">← → 翻页 · 滚轮 / 触屏滑动 · 点彩色标签直跳</div>
+
+    <script>
+      const slides = document.querySelectorAll('.slide');
+      const slidesContainer = document.getElementById('slides');
+      let current = 0;
+      let isAnimating = false;
+
+      function go(index) {
+        if (isAnimating) return;
+        const next = Math.max(0, Math.min(slides.length - 1, index));
+        if (next === current) return;
+        isAnimating = true;
+        slides[current].classList.remove('active');
+        current = next;
+        slides[current].classList.add('active');
+        slidesContainer.style.transform = `translateX(-${current * 100}vw)`;
+        setTimeout(() => { isAnimating = false; }, 770);
+      }
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+          e.preventDefault(); go(current + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault(); go(current - 1);
+        } else if (e.key === 'Home') go(0);
+        else if (e.key === 'End')  go(slides.length - 1);
+      });
+
+      let wheelBuffer = 0;
+      let wheelTimer = null;
+      window.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        wheelBuffer += e.deltaY;
+        clearTimeout(wheelTimer);
+        if (Math.abs(wheelBuffer) > 80) {
+          go(current + (wheelBuffer > 0 ? 1 : -1));
+          wheelBuffer = 0;
+        }
+        wheelTimer = setTimeout(() => { wheelBuffer = 0; }, 200);
+      }, { passive: false });
+
+      let touchStartX = 0;
+      window.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+      window.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) go(current + (dx < 0 ? 1 : -1));
+      });
+
+      // 直接点 tab 跳到对应 slide
+      document.querySelectorAll('.tab').forEach((tab) => {
+        tab.addEventListener('click', () => {
+          const i = Number(tab.dataset.i);
+          if (!Number.isNaN(i)) go(i);
+        });
+      });
+    </script>
+  </body>
+</html>

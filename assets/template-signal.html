@@ -1,0 +1,774 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>[必填] 替换为 Bold Signal PPT 标题 · Bold Signal Deck Title</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" />
+    <style>
+:root {
+  --bg-primary: #1a1a1a;
+  --bg-soft:    #232323;
+  --bg-gradient: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 50%, #1a1a1a 100%);
+
+  --card-orange: #FF5722;
+  --card-coral:  #FF7043;
+  --card-amber:  #FFC107;
+
+  --text-primary:   #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.72);
+  --text-muted:     rgba(255, 255, 255, 0.48);
+  --text-dim:       rgba(255, 255, 255, 0.28);
+  --text-on-card:   #1a1a1a;
+
+  --rule:        rgba(255, 255, 255, 0.12);
+  --rule-strong: rgba(255, 255, 255, 0.32);
+
+  --display: "Archivo Black", "Inter Tight", system-ui, sans-serif;
+  --sans:    "Space Grotesk", "Inter Tight", system-ui, sans-serif;
+  --mono:    "JetBrains Mono", "SF Mono", Consolas, monospace;
+
+  --pad-x: clamp(2rem, 6vw, 5.5rem);
+  --pad-y: clamp(1.8rem, 4vh, 3rem);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--sans);
+  font-weight: 400;
+  -webkit-font-smoothing: antialiased;
+}
+
+.deck {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.slides {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide {
+  flex: 0 0 100vw;
+  height: 100vh;
+  position: relative;
+  background: var(--bg-gradient);
+  padding: var(--pad-y) var(--pad-x);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  gap: clamp(1rem, 2vh, 1.5rem);
+  overflow: hidden;
+}
+
+/* === 顶部条 · 大编号 + 面包屑 === */
+.top-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 2rem);
+}
+
+.section-num {
+  font-family: var(--display);
+  font-size: clamp(2.8rem, 5.5vw, 4.6rem);
+  line-height: 0.9;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.crumbs {
+  display: flex;
+  gap: clamp(0.6rem, 1.2vw, 1.2rem);
+  font-family: var(--mono);
+  font-size: clamp(0.7rem, 0.92vw, 0.85rem);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  justify-content: flex-end;
+  flex-wrap: wrap;
+}
+.crumbs .item {
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+.crumbs .item.active { color: var(--text-primary); }
+.crumbs .item:hover { color: var(--text-secondary); }
+
+/* === 主区 · 12 列 grid === */
+.body {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: clamp(1rem, 2vw, 2rem);
+  align-content: center;
+}
+
+.span-4  { grid-column: span 4; }
+.span-5  { grid-column: span 5; }
+.span-6  { grid-column: span 6; }
+.span-7  { grid-column: span 7; }
+.span-8  { grid-column: span 8; }
+.span-9  { grid-column: span 9; }
+.span-12 { grid-column: span 12; }
+
+/* === 字体层级 === */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: clamp(0.7rem, 0.95vw, 0.85rem);
+  font-weight: 500;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--card-orange);
+  margin-bottom: clamp(0.6rem, 1.2vh, 1rem);
+}
+
+.h-hero {
+  font-family: var(--display);
+  font-size: clamp(3.6rem, 9vw, 7.8rem);
+  line-height: 0.92;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+.h-display {
+  font-family: var(--display);
+  font-size: clamp(2.6rem, 6vw, 4.8rem);
+  line-height: 1.0;
+  letter-spacing: -0.018em;
+  color: var(--text-primary);
+  text-transform: uppercase;
+}
+
+.h-section {
+  font-family: var(--display);
+  font-size: clamp(2rem, 4vw, 3rem);
+  line-height: 1.05;
+  letter-spacing: -0.012em;
+  color: var(--text-primary);
+  text-transform: uppercase;
+  margin-bottom: clamp(0.6rem, 1.2vh, 1rem);
+}
+
+.h-sub {
+  font-family: var(--sans);
+  font-weight: 700;
+  font-size: clamp(1rem, 1.6vw, 1.3rem);
+  line-height: 1.3;
+  letter-spacing: -0.005em;
+  color: var(--card-amber);
+  margin-bottom: clamp(0.8rem, 1.6vh, 1.2rem);
+  text-transform: uppercase;
+}
+
+.lead {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: clamp(1rem, 1.35vw, 1.18rem);
+  line-height: 1.55;
+  color: var(--text-secondary);
+  max-width: 56ch;
+}
+
+.body-text {
+  font-family: var(--sans);
+  font-weight: 400;
+  font-size: clamp(0.92rem, 1.15vw, 1.05rem);
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+.body-text strong { color: var(--text-primary); font-weight: 700; }
+
+/* === 橙色焦点卡片 · 必杀技 === */
+.signal-card {
+  background: var(--card-orange);
+  color: var(--text-on-card);
+  padding: clamp(1.4rem, 3vh, 2.4rem) clamp(1.4rem, 2.8vw, 2.4rem);
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.8rem, 1.6vh, 1.2rem);
+  height: 100%;
+  justify-content: space-between;
+  min-height: clamp(220px, 35vh, 420px);
+}
+
+.signal-card .card-num {
+  font-family: var(--display);
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  line-height: 0.9;
+  letter-spacing: -0.02em;
+}
+
+.signal-card .card-label {
+  font-family: var(--mono);
+  font-size: clamp(0.65rem, 0.9vw, 0.78rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+.signal-card .card-title {
+  font-family: var(--display);
+  font-size: clamp(1.6rem, 3vw, 2.4rem);
+  line-height: 1.0;
+  letter-spacing: -0.012em;
+  text-transform: uppercase;
+}
+
+.signal-card .card-note {
+  font-family: var(--sans);
+  font-weight: 500;
+  font-size: clamp(0.88rem, 1.1vw, 1rem);
+  line-height: 1.45;
+}
+
+/* === KPI 列 · 大数字 === */
+.kpi-stack {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2vh, 1.6rem);
+}
+
+.kpi-row {
+  display: grid;
+  grid-template-columns: clamp(80px, 12vw, 160px) 1fr;
+  gap: clamp(1rem, 2vw, 1.6rem);
+  padding-bottom: clamp(0.6rem, 1.2vh, 1rem);
+  border-bottom: 1px solid var(--rule);
+  align-items: baseline;
+}
+
+.kpi-num {
+  font-family: var(--display);
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  line-height: 0.92;
+  letter-spacing: -0.018em;
+  color: var(--card-orange);
+}
+
+.kpi-meta {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.2rem, 0.4vh, 0.3rem);
+}
+
+.kpi-meta .label {
+  font-family: var(--mono);
+  font-size: clamp(0.68rem, 0.9vw, 0.78rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.kpi-meta .desc {
+  font-family: var(--sans);
+  font-size: clamp(0.88rem, 1.1vw, 1.02rem);
+  line-height: 1.45;
+  color: var(--text-secondary);
+}
+
+/* === 列表项 (uppercase 标签 + 描述) === */
+.signal-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.7rem, 1.4vh, 1.2rem);
+}
+.signal-list li {
+  display: grid;
+  grid-template-columns: clamp(32px, 3.5vw, 48px) 1fr;
+  gap: clamp(0.6rem, 1.2vw, 1rem);
+  align-items: baseline;
+  padding-bottom: clamp(0.6rem, 1.2vh, 1rem);
+  border-bottom: 1px solid var(--rule);
+}
+.signal-list .num {
+  font-family: var(--mono);
+  font-weight: 700;
+  font-size: clamp(0.8rem, 1vw, 0.95rem);
+  letter-spacing: 0.1em;
+  color: var(--card-orange);
+}
+.signal-list .text {
+  font-family: var(--sans);
+  font-size: clamp(0.95rem, 1.2vw, 1.08rem);
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+.signal-list .text strong { color: var(--text-primary); font-weight: 700; }
+
+/* === CTA 大箭头 === */
+.cta-big {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(0.6rem, 1.2vw, 1rem);
+  padding: clamp(0.8rem, 1.8vh, 1.4rem) clamp(1.4rem, 2.6vw, 2.4rem);
+  background: var(--card-orange);
+  color: var(--text-on-card);
+  font-family: var(--display);
+  font-size: clamp(1.2rem, 2.2vw, 1.8rem);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: transform 0.2s ease, background 0.2s ease;
+  border: none;
+}
+.cta-big:hover { transform: translateX(6px); }
+.cta-big .arrow {
+  font-family: var(--display);
+  font-size: 1.1em;
+}
+
+/* === 底部 nav · 进度条 + 提示 === */
+.bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--mono);
+  font-size: clamp(0.65rem, 0.85vw, 0.75rem);
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.progress-segments {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+}
+.progress-segments .seg {
+  width: clamp(20px, 3vw, 36px);
+  height: 3px;
+  background: var(--text-dim);
+}
+.progress-segments .seg.active { background: var(--card-orange); }
+
+/* === 翻页提示 === */
+.nav-hint {
+  position: fixed;
+  bottom: clamp(0.5rem, 1.2vh, 0.9rem);
+  right: clamp(1rem, 2vw, 2rem);
+  font-family: var(--mono);
+  font-size: clamp(0.6rem, 0.78vw, 0.7rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  z-index: 50;
+}
+
+/* === 入场动效 === */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.slide.active .reveal { opacity: 1; transform: translateY(0); }
+.slide.active .reveal:nth-child(1) { transition-delay: 0.1s; }
+.slide.active .reveal:nth-child(2) { transition-delay: 0.2s; }
+.slide.active .reveal:nth-child(3) { transition-delay: 0.3s; }
+.slide.active .reveal:nth-child(4) { transition-delay: 0.4s; }
+.slide.active .reveal:nth-child(5) { transition-delay: 0.5s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal, .slides { transition-duration: 0.2s; }
+}
+    </style>
+  </head>
+  <body>
+    <div class="deck" id="deck">
+      <div class="slides" id="slides">
+
+        <!-- 封面 · 大编号 + 大字 hero -->
+        <section class="slide active">
+          <div class="top-row">
+            <div class="section-num">00</div>
+            <div></div>
+            <div class="crumbs">
+              <span class="item active">Cover</span>
+              <span class="item">01</span>
+              <span class="item">02</span>
+              <span class="item">03</span>
+              <span class="item">04</span>
+              <span class="item">End</span>
+            </div>
+          </div>
+
+          <div class="body">
+            <div class="span-12">
+              <div class="eyebrow reveal">{{Vol.01 · 2026 主题领域}}</div>
+              <h1 class="h-hero reveal" style="margin-top: clamp(0.6rem, 1.2vh, 1rem);">
+                {{大标题<br>多两行 OK}}
+              </h1>
+              <p class="lead reveal" style="margin-top: clamp(1.4rem, 2.8vh, 2rem); max-width: 60ch;">
+                {{一两句引言 · Bold Signal 风偏好"直接的、有冲击的、不绕弯"的开场。}}
+              </p>
+            </div>
+          </div>
+
+          <div class="bottom-row">
+            <div class="reveal">{{作者 · 单位}}</div>
+            <div class="progress-segments">
+              <span class="seg active"></span>
+              <span class="seg"></span>
+              <span class="seg"></span>
+              <span class="seg"></span>
+              <span class="seg"></span>
+              <span class="seg"></span>
+            </div>
+            <div>01 / 06</div>
+          </div>
+        </section>
+
+        <!-- 章节封 · 橙卡 + 主标 -->
+        <section class="slide">
+          <div class="top-row">
+            <div class="section-num">01</div>
+            <div></div>
+            <div class="crumbs">
+              <span class="item">Cover</span>
+              <span class="item active">01</span>
+              <span class="item">02</span>
+              <span class="item">03</span>
+              <span class="item">04</span>
+              <span class="item">End</span>
+            </div>
+          </div>
+
+          <div class="body">
+            <div class="span-5 reveal">
+              <div class="signal-card">
+                <div class="card-label">Section 01</div>
+                <div class="card-num">01</div>
+                <div>
+                  <div class="card-title">{{章节短名}}</div>
+                  <div class="card-note" style="margin-top: clamp(0.4rem, 0.8vh, 0.6rem);">
+                    {{章节副标 · 一句话点题}}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="span-7" style="display: flex; flex-direction: column; justify-content: center;">
+              <div class="eyebrow reveal">— Section 01</div>
+              <h2 class="h-display reveal">{{章节主标题<br>大字两行}}</h2>
+              <p class="lead reveal" style="margin-top: clamp(1.2rem, 2.4vh, 1.8rem);">
+                {{章节引论 · 60-100 字。直接陈述论点，不要绕。}}
+              </p>
+            </div>
+          </div>
+
+          <div class="bottom-row">
+            <div>{{项目名}}</div>
+            <div class="progress-segments">
+              <span class="seg"></span>
+              <span class="seg active"></span>
+              <span class="seg"></span>
+              <span class="seg"></span>
+              <span class="seg"></span>
+              <span class="seg"></span>
+            </div>
+            <div>02 / 06</div>
+          </div>
+        </section>
+
+        <!-- 编号 signal list -->
+        <section class="slide">
+          <div class="top-row">
+            <div class="section-num">02</div>
+            <div></div>
+            <div class="crumbs">
+              <span class="item">Cover</span>
+              <span class="item">01</span>
+              <span class="item active">02</span>
+              <span class="item">03</span>
+              <span class="item">04</span>
+              <span class="item">End</span>
+            </div>
+          </div>
+
+          <div class="body">
+            <div class="span-5">
+              <div class="eyebrow reveal">Key Signals</div>
+              <h2 class="h-section reveal">{{页面标题}}</h2>
+              <p class="h-sub reveal">{{副标 · uppercase 强调</p>
+              <p class="body-text reveal" style="margin-top: clamp(0.8rem, 1.6vh, 1.2rem);">
+                {{这页要传达的中心论点。Bold Signal 偏好"硬陈述 + 数据支持"。}}
+              </p>
+            </div>
+            <div class="span-7 reveal">
+              <ul class="signal-list">
+                <li>
+                  <span class="num">01</span>
+                  <span class="text"><strong>{{要点一标题。}}</strong>{{一句话陈述 · 30-50 字。}}</span>
+                </li>
+                <li>
+                  <span class="num">02</span>
+                  <span class="text"><strong>{{要点二标题。}}</strong>{{一句话陈述。}}</span>
+                </li>
+                <li>
+                  <span class="num">03</span>
+                  <span class="text"><strong>{{要点三标题。}}</strong>{{一句话陈述。}}</span>
+                </li>
+                <li>
+                  <span class="num">04</span>
+                  <span class="text"><strong>{{要点四标题。}}</strong>{{一句话陈述。}}</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="bottom-row">
+            <div>{{章节名}}</div>
+            <div class="progress-segments">
+              <span class="seg"></span>
+              <span class="seg"></span>
+              <span class="seg active"></span>
+              <span class="seg"></span>
+              <span class="seg"></span>
+              <span class="seg"></span>
+            </div>
+            <div>03 / 06</div>
+          </div>
+        </section>
+
+        <!-- 数据 · KPI stack + 橙卡 -->
+        <section class="slide">
+          <div class="top-row">
+            <div class="section-num">03</div>
+            <div></div>
+            <div class="crumbs">
+              <span class="item">Cover</span>
+              <span class="item">01</span>
+              <span class="item">02</span>
+              <span class="item active">03</span>
+              <span class="item">04</span>
+              <span class="item">End</span>
+            </div>
+          </div>
+
+          <div class="body">
+            <div class="span-4 reveal">
+              <div class="signal-card">
+                <div class="card-label">Hero Metric</div>
+                <div>
+                  <div class="card-num" style="font-size: clamp(4rem, 8vw, 6.4rem);">87<span style="font-size: 0.5em;">%</span></div>
+                  <div class="card-title" style="margin-top: clamp(0.4rem, 0.8vh, 0.6rem);">{{核心指标}}</div>
+                </div>
+                <div class="card-note">{{说明这个数字代表什么 · 时间 / 口径}}</div>
+              </div>
+            </div>
+            <div class="span-8" style="display: flex; flex-direction: column; justify-content: center;">
+              <div class="eyebrow reveal">{{Data · By the numbers}}</div>
+              <h2 class="h-section reveal" style="margin-bottom: clamp(1rem, 2vh, 1.5rem);">{{为什么这些数字重要}}</h2>
+
+              <div class="kpi-stack reveal">
+                <div class="kpi-row">
+                  <span class="kpi-num">2.4×</span>
+                  <div class="kpi-meta">
+                    <span class="label">指标 B</span>
+                    <span class="desc">{{对比基线 / 归因说明}}</span>
+                  </div>
+                </div>
+                <div class="kpi-row">
+                  <span class="kpi-num">12<span style="font-size: 0.55em;">月</span></span>
+                  <div class="kpi-meta">
+                    <span class="label">指标 C</span>
+                    <span class="desc">{{时间窗口 / 阶段}}</span>
+                  </div>
+                </div>
+                <div class="kpi-row">
+                  <span class="kpi-num">第 3<span style="font-size: 0.55em;">代</span></span>
+                  <div class="kpi-meta">
+                    <span class="label">指标 D</span>
+                    <span class="desc">{{版本 / 阶段说明}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bottom-row">
+            <div>{{数据来源 · YYYY.MM}}</div>
+            <div class="progress-segments">
+              <span class="seg"></span>
+              <span class="seg"></span>
+              <span class="seg"></span>
+              <span class="seg active"></span>
+              <span class="seg"></span>
+              <span class="seg"></span>
+            </div>
+            <div>04 / 06</div>
+          </div>
+        </section>
+
+        <!-- Statement / pull quote -->
+        <section class="slide">
+          <div class="top-row">
+            <div class="section-num">04</div>
+            <div></div>
+            <div class="crumbs">
+              <span class="item">Cover</span>
+              <span class="item">01</span>
+              <span class="item">02</span>
+              <span class="item">03</span>
+              <span class="item active">04</span>
+              <span class="item">End</span>
+            </div>
+          </div>
+
+          <div class="body">
+            <div class="span-12" style="display: flex; flex-direction: column; justify-content: center;">
+              <div class="eyebrow reveal">Statement · 04</div>
+              <h2 class="h-hero reveal" style="font-size: clamp(2.8rem, 7.5vw, 6.4rem); margin-top: clamp(1rem, 2vh, 1.5rem); max-width: 22ch;">
+                {{一句话主张<br><span style="color: var(--card-orange);">大字 · 强势</span>}}
+              </h2>
+              <p class="lead reveal" style="margin-top: clamp(1.4rem, 2.8vh, 2rem); max-width: 60ch;">
+                {{对这个 statement 的展开 / 注解 / 反对立场。约 40-80 字。}}
+              </p>
+            </div>
+          </div>
+
+          <div class="bottom-row">
+            <div>{{出处 · 上下文}}</div>
+            <div class="progress-segments">
+              <span class="seg"></span>
+              <span class="seg"></span>
+              <span class="seg"></span>
+              <span class="seg"></span>
+              <span class="seg active"></span>
+              <span class="seg"></span>
+            </div>
+            <div>05 / 06</div>
+          </div>
+        </section>
+
+        <!-- 收束 · CTA 橙箭头 -->
+        <section class="slide">
+          <div class="top-row">
+            <div class="section-num">05</div>
+            <div></div>
+            <div class="crumbs">
+              <span class="item">Cover</span>
+              <span class="item">01</span>
+              <span class="item">02</span>
+              <span class="item">03</span>
+              <span class="item">04</span>
+              <span class="item active">End</span>
+            </div>
+          </div>
+
+          <div class="body">
+            <div class="span-7" style="display: flex; flex-direction: column; justify-content: center;">
+              <div class="eyebrow reveal">Take Action · 05</div>
+              <h2 class="h-display reveal">
+                {{收束句第一行<br>第二行}}
+              </h2>
+              <p class="lead reveal" style="margin-top: clamp(1.4rem, 2.8vh, 2rem); max-width: 50ch;">
+                {{一段行动建议 / 邀请 / 开放问题。Bold Signal 收尾要直接。}}
+              </p>
+              <div class="reveal" style="margin-top: clamp(1.6rem, 3vh, 2.4rem);">
+                <a class="cta-big" href="#">
+                  {{Get in touch}} <span class="arrow">→</span>
+                </a>
+              </div>
+            </div>
+            <div class="span-5 reveal">
+              <div class="signal-card">
+                <div class="card-label">Contact</div>
+                <div class="card-num" style="font-size: clamp(3rem, 6vw, 5rem);">{{Q&A}}</div>
+                <div>
+                  <div class="card-title">{{联系方式}}</div>
+                  <div class="card-note">{{邮箱 · @handle · 任何渠道}}</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bottom-row">
+            <div>{{End of Vol.01}}</div>
+            <div class="progress-segments">
+              <span class="seg"></span>
+              <span class="seg"></span>
+              <span class="seg"></span>
+              <span class="seg"></span>
+              <span class="seg"></span>
+              <span class="seg active"></span>
+            </div>
+            <div>06 / 06</div>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="nav-hint">← → 翻页 · 滚轮 / 触屏滑动 · 点面包屑直跳</div>
+
+    <script>
+      const slides = document.querySelectorAll('.slide');
+      const slidesContainer = document.getElementById('slides');
+      let current = 0;
+      let isAnimating = false;
+
+      function go(index) {
+        if (isAnimating) return;
+        const next = Math.max(0, Math.min(slides.length - 1, index));
+        if (next === current) return;
+        isAnimating = true;
+        slides[current].classList.remove('active');
+        current = next;
+        slides[current].classList.add('active');
+        slidesContainer.style.transform = `translateX(-${current * 100}vw)`;
+        setTimeout(() => { isAnimating = false; }, 720);
+      }
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+          e.preventDefault(); go(current + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault(); go(current - 1);
+        } else if (e.key === 'Home') go(0);
+        else if (e.key === 'End')  go(slides.length - 1);
+      });
+
+      let wheelBuffer = 0;
+      let wheelTimer = null;
+      window.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        wheelBuffer += e.deltaY;
+        clearTimeout(wheelTimer);
+        if (Math.abs(wheelBuffer) > 80) {
+          go(current + (wheelBuffer > 0 ? 1 : -1));
+          wheelBuffer = 0;
+        }
+        wheelTimer = setTimeout(() => { wheelBuffer = 0; }, 200);
+      }, { passive: false });
+
+      let touchStartX = 0;
+      window.addEventListener('touchstart', (e) => { touchStartX = e.touches[0].clientX; }, { passive: true });
+      window.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) go(current + (dx < 0 ? 1 : -1));
+      });
+
+      // 点面包屑跳页
+      document.querySelectorAll('.crumbs').forEach((row) => {
+        const items = row.querySelectorAll('.item');
+        items.forEach((it, i) => {
+          it.addEventListener('click', () => go(i));
+        });
+      });
+    </script>
+  </body>
+</html>

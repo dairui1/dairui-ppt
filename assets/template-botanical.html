@@ -1,0 +1,680 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>[必填] 替换为暗夜植物风 PPT 标题 · Dark Botanical Deck Title</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,400;0,500;0,600;1,400;1,500&family=IBM+Plex+Sans:wght@300;400;500&family=IBM+Plex+Mono:wght@300;400&display=swap" />
+    <style>
+:root {
+  --bg-primary: #0f0f0f;
+  --bg-soft:    #161514;
+  --bg-elev:    #1c1a18;
+  --text-primary:   #e8e4df;
+  --text-secondary: #9a9590;
+  --text-muted:     #6e6862;
+  --accent-warm:    #d4a574;
+  --accent-pink:    #e8b4b8;
+  --accent-gold:    #c9b896;
+  --rule:           rgba(232, 228, 223, 0.12);
+  --rule-strong:    rgba(232, 228, 223, 0.28);
+
+  --serif: "Cormorant", "Source Serif 4", Georgia, serif;
+  --sans:  "IBM Plex Sans", "Inter Tight", system-ui, sans-serif;
+  --mono:  "IBM Plex Mono", "JetBrains Mono", monospace;
+
+  --pad-x: clamp(2rem, 6vw, 5.5rem);
+  --pad-y: clamp(1.6rem, 4vh, 3rem);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--sans);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* === Deck container === */
+.deck {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.slides {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide {
+  flex: 0 0 100vw;
+  height: 100vh;
+  position: relative;
+  padding: var(--pad-y) var(--pad-x);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--bg-primary);
+}
+
+/* 抽象软渐变圆 · 营造氛围（每页可见） */
+.atmos {
+  position: absolute;
+  pointer-events: none;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.5;
+  z-index: 0;
+}
+.atmos-1 {
+  top: -20%; left: -15%;
+  width: 60vw; height: 60vw;
+  background: radial-gradient(circle, rgba(212, 165, 116, 0.45) 0%, transparent 65%);
+}
+.atmos-2 {
+  bottom: -25%; right: -10%;
+  width: 50vw; height: 50vw;
+  background: radial-gradient(circle, rgba(232, 180, 184, 0.3) 0%, transparent 65%);
+  animation: drift 24s ease-in-out infinite;
+}
+.atmos-3 {
+  top: 30%; right: 25%;
+  width: 30vw; height: 30vw;
+  background: radial-gradient(circle, rgba(201, 184, 150, 0.22) 0%, transparent 65%);
+  animation: drift 32s ease-in-out infinite reverse;
+}
+
+@keyframes drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  50% { transform: translate(5%, -5%) scale(1.08); }
+}
+
+.slide > *:not(.atmos) { position: relative; z-index: 1; }
+
+/* === 元数据条 === */
+.chrome {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: clamp(0.62rem, 0.85vw, 0.75rem);
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: clamp(1.5rem, 3vh, 2.5rem);
+}
+
+.foot {
+  position: absolute;
+  bottom: clamp(1rem, 2.5vh, 2rem);
+  left: var(--pad-x);
+  right: var(--pad-x);
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--mono);
+  font-size: clamp(0.6rem, 0.78vw, 0.72rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  z-index: 2;
+}
+
+/* 纵向 accent 线（章节标识） */
+.accent-line {
+  position: absolute;
+  left: clamp(2rem, 5vw, 3.5rem);
+  top: 20%;
+  bottom: 25%;
+  width: 1px;
+  background: var(--accent-warm);
+  z-index: 1;
+}
+.accent-line::before,
+.accent-line::after {
+  content: '';
+  position: absolute;
+  left: -3px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-warm);
+}
+.accent-line::before { top: 0; }
+.accent-line::after { bottom: 0; }
+
+/* === 字体层级 === */
+.eyebrow {
+  font-family: var(--mono);
+  font-size: clamp(0.7rem, 0.95vw, 0.85rem);
+  font-weight: 400;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+  margin-bottom: clamp(1rem, 2vh, 1.8rem);
+}
+
+.h-hero {
+  font-family: var(--serif);
+  font-weight: 400;
+  font-style: italic;
+  font-size: clamp(3.5rem, 10vw, 8.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.005em;
+  color: var(--text-primary);
+}
+
+.h-display {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(2.6rem, 6.5vw, 5rem);
+  line-height: 1.05;
+  letter-spacing: -0.008em;
+  color: var(--text-primary);
+}
+
+.h-display em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent-warm);
+}
+
+.h-section {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(2rem, 4.2vw, 3.2rem);
+  line-height: 1.12;
+  letter-spacing: -0.005em;
+  color: var(--text-primary);
+  margin-bottom: clamp(0.8rem, 1.6vh, 1.2rem);
+}
+
+.h-sub {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1.2rem, 2.1vw, 1.7rem);
+  line-height: 1.3;
+  color: var(--accent-warm);
+  margin-bottom: clamp(1rem, 2vh, 1.6rem);
+}
+
+.lead {
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: clamp(1rem, 1.35vw, 1.22rem);
+  line-height: 1.6;
+  color: var(--text-secondary);
+  max-width: 56ch;
+}
+
+.body-text {
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: clamp(0.88rem, 1.15vw, 1.05rem);
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+
+.body-text strong {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.signature {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(1rem, 1.4vw, 1.2rem);
+  color: var(--accent-pink);
+}
+
+/* === 布局 === */
+.cover {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  height: 100%;
+}
+
+.cover-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  gap: clamp(1.5rem, 3vh, 2.5rem);
+}
+
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(2rem, 4vw, 4rem);
+  flex: 1;
+  align-items: start;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  flex: 1;
+  align-content: center;
+}
+
+.spec-card {
+  border-top: 1px solid var(--rule-strong);
+  padding: clamp(1rem, 2vh, 1.6rem) 0;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.4rem, 0.8vh, 0.6rem);
+}
+
+.spec-card .spec-name {
+  font-family: var(--mono);
+  font-size: clamp(0.7rem, 0.9vw, 0.8rem);
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent-warm);
+}
+
+.spec-card .spec-value {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+  line-height: 1.15;
+  color: var(--text-primary);
+}
+
+.spec-card .spec-note {
+  font-family: var(--sans);
+  font-weight: 300;
+  font-size: clamp(0.78rem, 1vw, 0.9rem);
+  line-height: 1.5;
+  color: var(--text-secondary);
+}
+
+/* timeline · 简洁竖列 */
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(1rem, 2vh, 1.6rem);
+}
+.timeline-row {
+  display: grid;
+  grid-template-columns: clamp(60px, 8vw, 110px) 1fr;
+  gap: clamp(1rem, 2vw, 1.8rem);
+  align-items: baseline;
+  padding-bottom: clamp(0.8rem, 1.6vh, 1.2rem);
+  border-bottom: 1px solid var(--rule);
+}
+.timeline-year {
+  font-family: var(--mono);
+  font-size: clamp(0.85rem, 1.1vw, 1rem);
+  letter-spacing: 0.12em;
+  color: var(--accent-warm);
+}
+.timeline-text {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: clamp(1.05rem, 1.5vw, 1.3rem);
+  line-height: 1.35;
+  color: var(--text-primary);
+}
+.timeline-text em {
+  font-style: italic;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
+
+/* CTA */
+.cta-link {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.8em;
+  padding-bottom: 0.3em;
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.3rem, 2.4vw, 2rem);
+  letter-spacing: -0.005em;
+  color: var(--accent-warm);
+  border-bottom: 1px solid var(--accent-warm);
+  text-decoration: none;
+  transition: color 0.3s ease, border-color 0.3s ease;
+}
+.cta-link:hover {
+  color: var(--accent-pink);
+  border-color: var(--accent-pink);
+}
+.cta-link .arrow {
+  font-family: var(--sans);
+  font-style: normal;
+  font-weight: 300;
+  font-size: 0.85em;
+}
+
+/* === 翻页指示 / 进度 === */
+.nav-hint {
+  position: fixed;
+  bottom: clamp(0.6rem, 1.5vh, 1rem);
+  right: clamp(1rem, 2vw, 2rem);
+  font-family: var(--mono);
+  font-size: clamp(0.6rem, 0.78vw, 0.7rem);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  z-index: 50;
+}
+
+.progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  background: var(--accent-warm);
+  width: 0;
+  transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  z-index: 60;
+}
+
+/* === 入场动效 (blur in + fade) === */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  filter: blur(6px);
+  transition:
+    opacity 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.9s cubic-bezier(0.16, 1, 0.3, 1),
+    filter 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.slide.active .reveal {
+  opacity: 1;
+  transform: translateY(0);
+  filter: blur(0);
+}
+.slide.active .reveal:nth-child(1) { transition-delay: 0.15s; }
+.slide.active .reveal:nth-child(2) { transition-delay: 0.3s; }
+.slide.active .reveal:nth-child(3) { transition-delay: 0.45s; }
+.slide.active .reveal:nth-child(4) { transition-delay: 0.6s; }
+.slide.active .reveal:nth-child(5) { transition-delay: 0.75s; }
+.slide.active .reveal:nth-child(6) { transition-delay: 0.9s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { transition-duration: 0.2s; filter: none; }
+  .slides { transition-duration: 0.2s; }
+  .atmos-2, .atmos-3 { animation: none; }
+}
+    </style>
+  </head>
+  <body>
+    <div class="progress" id="progress"></div>
+    <div class="deck" id="deck">
+      <div class="slides" id="slides">
+
+        <!-- ============ 封面 · 大字斜体衬线 ============ -->
+        <section class="slide active">
+          <div class="atmos atmos-1"></div>
+          <div class="atmos atmos-2"></div>
+
+          <div class="chrome">
+            <span>{{主题领域}} · 2026</span>
+            <span>—</span>
+          </div>
+
+          <div class="cover-center" style="flex: 1;">
+            <span class="eyebrow reveal">{{副栏目 · A Field Note}}</span>
+            <h1 class="h-hero reveal">{{主标题}}</h1>
+            <p class="lead reveal" style="max-width: 50ch;">
+              {{一两句引言。暗夜植物风偏好优雅、感性、留白多。不写营销词，让文字本身有重量。}}
+            </p>
+            <p class="signature reveal">— {{作者签名}}</p>
+          </div>
+
+          <div class="foot">
+            <span>{{单位 · 时间}}</span>
+            <span>01 / 06</span>
+          </div>
+        </section>
+
+        <!-- ============ 章节封 · italic + accent ============ -->
+        <section class="slide">
+          <div class="atmos atmos-1"></div>
+          <div class="atmos atmos-3"></div>
+          <div class="accent-line"></div>
+
+          <div class="chrome">
+            <span>I · Chapter</span>
+            <span>{{章节副标}}</span>
+          </div>
+
+          <div style="flex: 1; display: flex; flex-direction: column; justify-content: center; padding-left: clamp(2rem, 6vw, 5rem);">
+            <span class="eyebrow reveal">— Section 01</span>
+            <h2 class="h-display reveal">
+              {{章节主题第一行}}<br>
+              <em>{{斜体强调第二行}}</em>
+            </h2>
+            <p class="lead reveal" style="margin-top: clamp(1.5rem, 3vh, 2.5rem);">
+              {{章节引论。一段，约 60-100 字。}}
+            </p>
+          </div>
+
+          <div class="foot">
+            <span>{{项目名}}</span>
+            <span>02 / 06</span>
+          </div>
+        </section>
+
+        <!-- ============ 正文 · 两栏（概念 + 阐释） ============ -->
+        <section class="slide">
+          <div class="atmos atmos-2"></div>
+
+          <div class="chrome">
+            <span>I · 01 · {{章节名}}</span>
+            <span>{{页面副标}}</span>
+          </div>
+
+          <span class="eyebrow reveal">关键概念</span>
+          <h2 class="h-section reveal">{{页面标题}}</h2>
+          <p class="h-sub reveal">{{斜体衬线副标}}</p>
+
+          <div class="grid-2 reveal" style="margin-top: clamp(1.2rem, 2.5vh, 2rem);">
+            <div>
+              <p class="body-text" style="margin-bottom: clamp(0.8rem, 1.6vh, 1.2rem);">
+                这里写一段较长的引论。<strong>关键词可加粗</strong>提示节奏，但不要每句都加粗。整段保持低调克制，让 italic 副标和小标题做高潮。
+              </p>
+              <p class="body-text">
+                第二段可以是对照、引述、或继续展开。约 60-90 字。整页正文总量不超过 200 字。
+              </p>
+            </div>
+            <div>
+              <p class="body-text" style="margin-bottom: clamp(0.8rem, 1.6vh, 1.2rem);">
+                右栏可以放具体例子、引用、或案例描述。<strong>对照</strong>结构（左：抽象 / 右：具体）特别适合这风格。
+              </p>
+              <p class="body-text">
+                也可以放一段引用：<em>"原文摘录或受访者的话，斜体衬线最适合做这件事。"</em>
+              </p>
+            </div>
+          </div>
+
+          <div class="foot">
+            <span>{{作者 · 单位}}</span>
+            <span>03 / 06</span>
+          </div>
+        </section>
+
+        <!-- ============ Spec / 三栏卡片 · 顶部 hairline ============ -->
+        <section class="slide">
+          <div class="atmos atmos-3"></div>
+
+          <div class="chrome">
+            <span>I · 02 · Specifications</span>
+            <span>By the Numbers</span>
+          </div>
+
+          <span class="eyebrow reveal">{{数据 / 规格 / 特性}}</span>
+          <h2 class="h-section reveal">{{为什么这些指标值得记住}}</h2>
+
+          <div class="grid-3" style="margin-top: clamp(1.5rem, 3vh, 2.5rem);">
+            <div class="spec-card reveal">
+              <span class="spec-name">维度 A</span>
+              <span class="spec-value">87<span style="font-size: 0.55em; color: var(--text-muted);">%</span></span>
+              <p class="spec-note">{{说明这数字在什么场景下重要}}</p>
+            </div>
+            <div class="spec-card reveal">
+              <span class="spec-name">维度 B</span>
+              <span class="spec-value">2.4<span style="font-size: 0.55em; color: var(--text-muted);">×</span></span>
+              <p class="spec-note">{{对比基线、归因}}</p>
+            </div>
+            <div class="spec-card reveal">
+              <span class="spec-name">维度 C</span>
+              <span class="spec-value">第 3<span style="font-size: 0.55em; color: var(--text-muted);">代</span></span>
+              <p class="spec-note">{{时间窗口 / 版本 / 阶段}}</p>
+            </div>
+          </div>
+
+          <div class="foot">
+            <span>{{数据来源 · YYYY.MM}}</span>
+            <span>04 / 06</span>
+          </div>
+        </section>
+
+        <!-- ============ Timeline · 简约时间轴 ============ -->
+        <section class="slide">
+          <div class="atmos atmos-1"></div>
+
+          <div class="chrome">
+            <span>II · 01 · Timeline</span>
+            <span>{{时间跨度}}</span>
+          </div>
+
+          <span class="eyebrow reveal">演进 · 一条线索</span>
+          <h2 class="h-section reveal">{{时间轴标题}}</h2>
+          <p class="h-sub reveal">{{斜体副标 · 引出主题}}</p>
+
+          <div class="timeline" style="margin-top: clamp(1rem, 2vh, 1.5rem);">
+            <div class="timeline-row reveal">
+              <span class="timeline-year">2022</span>
+              <p class="timeline-text">{{节点 1 的判断 / 事件}}<em> · 补充说明</em></p>
+            </div>
+            <div class="timeline-row reveal">
+              <span class="timeline-year">2023</span>
+              <p class="timeline-text">{{节点 2 的判断 / 事件}}<em> · 补充说明</em></p>
+            </div>
+            <div class="timeline-row reveal">
+              <span class="timeline-year">2024</span>
+              <p class="timeline-text">{{节点 3 的判断 / 事件}}<em> · 补充说明</em></p>
+            </div>
+            <div class="timeline-row reveal">
+              <span class="timeline-year">2025</span>
+              <p class="timeline-text">{{节点 4 的判断 / 事件}}<em> · 补充说明</em></p>
+            </div>
+          </div>
+
+          <div class="foot">
+            <span>{{研究 / 整理}}</span>
+            <span>05 / 06</span>
+          </div>
+        </section>
+
+        <!-- ============ 收束 · 居中 italic + CTA ============ -->
+        <section class="slide">
+          <div class="atmos atmos-1"></div>
+          <div class="atmos atmos-2"></div>
+          <div class="atmos atmos-3"></div>
+
+          <div class="chrome">
+            <span>End · Vol.01</span>
+            <span>—</span>
+          </div>
+
+          <div class="cover-center" style="flex: 1;">
+            <span class="eyebrow reveal">{{如果你也在想这件事}}</span>
+            <h2 class="h-display reveal">
+              {{收束句第一行}}<br>
+              <em>{{斜体强调 · 第二行}}</em>
+            </h2>
+            <p class="lead reveal" style="max-width: 52ch; text-align: center;">
+              {{开放式邀请 / 一段判断 / 给读者留一个问题。约 30-60 字。}}
+            </p>
+            <a class="cta-link reveal" href="#">
+              {{回信 · 联系方式}} <span class="arrow">→</span>
+            </a>
+            <p class="signature reveal">— {{作者签名}}</p>
+          </div>
+
+          <div class="foot">
+            <span>{{邮箱 · @handle}}</span>
+            <span>06 / 06</span>
+          </div>
+        </section>
+
+      </div>
+    </div>
+
+    <div class="nav-hint">← → 翻页 · 滚轮 / 触屏滑动</div>
+
+    <script>
+      const slides = document.querySelectorAll('.slide');
+      const slidesContainer = document.getElementById('slides');
+      const progress = document.getElementById('progress');
+      let current = 0;
+      let isAnimating = false;
+
+      function go(index) {
+        if (isAnimating) return;
+        const next = Math.max(0, Math.min(slides.length - 1, index));
+        if (next === current) return;
+        isAnimating = true;
+        slides[current].classList.remove('active');
+        current = next;
+        slides[current].classList.add('active');
+        slidesContainer.style.transform = `translateX(-${current * 100}vw)`;
+        progress.style.width = `${((current + 1) / slides.length) * 100}%`;
+        setTimeout(() => { isAnimating = false; }, 870);
+      }
+
+      progress.style.width = `${(1 / slides.length) * 100}%`;
+
+      window.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+          e.preventDefault(); go(current + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+          e.preventDefault(); go(current - 1);
+        } else if (e.key === 'Home') { go(0); }
+        else if (e.key === 'End') { go(slides.length - 1); }
+      });
+
+      let wheelBuffer = 0;
+      let wheelTimer = null;
+      window.addEventListener('wheel', (e) => {
+        e.preventDefault();
+        wheelBuffer += e.deltaY;
+        clearTimeout(wheelTimer);
+        if (Math.abs(wheelBuffer) > 80) {
+          go(current + (wheelBuffer > 0 ? 1 : -1));
+          wheelBuffer = 0;
+        }
+        wheelTimer = setTimeout(() => { wheelBuffer = 0; }, 200);
+      }, { passive: false });
+
+      let touchStartX = 0;
+      window.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+      }, { passive: true });
+      window.addEventListener('touchend', (e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(dx) > 50) go(current + (dx < 0 ? 1 : -1));
+      });
+    </script>
+  </body>
+</html>
