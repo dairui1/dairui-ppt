@@ -601,10 +601,11 @@ bash <SKILL_ROOT>/scripts/deploy-vercel.sh 项目/XXX/ppt/
 ```bash
 bash <SKILL_ROOT>/scripts/deploy-cloudflare.sh 项目/XXX/ppt/index.html --slug my-talk
 # 默认 domain = ppt.dairui1.com / zone = dairui1.com
-# 一次性准备：CF 后台加 Custom Domain `ppt.dairui1.com` + `npx wrangler login`
+# 部署前验证配置：加 --dry-run
+# 一次性准备：Cloudflare zone 已接入 + hostname 有橙云 DNS 或同 hostname 的 Worker Custom Domain + `npx wrangler login`
 ```
 
-两个脚本都有 `--help`。Cloudflare 部署完每个 deck 是独立 worker，可以单独删（`npx wrangler delete --name ppt-<slug>`）。
+两个脚本都有 `--help`。Cloudflare 部署完每个 deck 是独立 worker，可以单独删（`npx wrangler delete --name ppt-<slug>`）。`<slug>` 用小写英文、数字、短横线，脚本会把大小写和下划线规范化；中文标题请显式给 `--slug`。
 
 ---
 

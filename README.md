@@ -21,7 +21,7 @@
 - **Viewport 自检** — `node scripts/check-overflow.mjs index.html` 在三档视口下测每页是否溢出
 - **PPTX 导入** — `python scripts/extract-pptx.py file.pptx out/` 把已有 PowerPoint 转成 JSON + 图片
 - **Vercel 部署** — `bash scripts/deploy-vercel.sh path/` 出 preview URL
-- **Cloudflare Workers 部署到 `ppt.dairui1.com/<slug>/`** — `bash scripts/deploy-cloudflare.sh path/ --slug my-talk`
+- **Cloudflare Workers 部署到 `ppt.dairui1.com/<slug>/`** — `bash scripts/deploy-cloudflare.sh path/ --slug my-talk`（支持 `--dry-run`）
 - **反 AI Slop 守则** — `references/anti-ai-slop.md` 跨风格通用的反平庸清单
 - **动效配方手册** — `references/animation-patterns.md` 把"想要什么感觉"翻译成具体动效
 - **Viewport 100vh 硬规则** — `references/viewport-rules.md` 跨风格 clamp + 不滚动约束
@@ -56,6 +56,9 @@ bash dairui-ppt/scripts/deploy-vercel.sh 项目/XXX/ppt/
 
 # 可选 · 部署到 ppt.dairui1.com/<slug>/
 bash dairui-ppt/scripts/deploy-cloudflare.sh 项目/XXX/ppt/index.html --slug my-talk
+
+# 可选 · 部署前只验证 Cloudflare Workers 配置，不发布
+bash dairui-ppt/scripts/deploy-cloudflare.sh 项目/XXX/ppt/index.html --slug my-talk --dry-run
 ```
 
 把这个 skill 交给 Agent，详细工作流见 `SKILL.md`。
@@ -106,7 +109,7 @@ dairui-ppt/
     ├── extract-pptx.py          ← .pptx → JSON + 图片导入工具
     ├── add-editing.mjs          ← 注入浏览器内编辑 UI
     ├── deploy-vercel.sh         ← Vercel preview / production 部署
-    └── deploy-cloudflare.sh     ← Cloudflare Workers · ppt.dairui1.com/<slug>/
+    └── deploy-cloudflare.sh     ← Cloudflare Workers · ppt.dairui1.com/<slug>/（含 dry-run）
 ```
 
 ## 操作
