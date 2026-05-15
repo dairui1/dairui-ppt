@@ -1,6 +1,6 @@
 ---
 name: dairui-ppt
-description: Use when the user wants to generate a single-file HTML PPT/deck for a sharing session, demo day, internal talk, project report, white paper, annual recap, equity research, investor memo, editorial article, brand lookbook, hackathon demo, dev talk, or anything that should be "做完直接发，不用翻页工具"。Triggers on "做 PPT / 做 deck / 网页 PPT / 演讲 / 分享 / 发布会 / 路演 / 一次做完 / horizontal swipe deck"，更具体地"杂志风 / Monocle 感 / 瑞士风 / Swiss Style / Helvetica / 极简数据 / 思维导图 / mindmap / 脑图 / 把文章讲成 PPT / 纸风格 / 白皮书 / 印刷感 / 打印 PDF / 异步阅读 / 编辑风 / Fraunces / 暗夜风 / dark botanical / 高端品牌 / lookbook / 笔记本风 / notebook / hobonichi / 手账 / Bold Signal / 大字 / 橙色焦点 / demo day / 终端风 / terminal / 黑客 / 极客 talk / 代码 demo / 把 PPTX 转成网页 / 部署到我自己域名"。不适合：大量表格数据、培训课件、需要多人协作编辑的场景。
+description: Use when the user wants to generate a single-file HTML PPT/deck for a sharing session, demo day, internal talk, project report, white paper, annual recap, equity research, investor memo, editorial article, brand lookbook, hackathon demo, dev talk, sketchnote-style system explainer, animated technical demo, or anything that should be "做完直接发，不用翻页工具"。Triggers on "做 PPT / 做 deck / 网页 PPT / 演讲 / 分享 / 发布会 / 路演 / 一次做完 / horizontal swipe deck"，更具体地"杂志风 / Monocle 感 / 瑞士风 / Swiss Style / Helvetica / 极简数据 / 思维导图 / mindmap / 脑图 / 把文章讲成 PPT / 纸风格 / 白皮书 / 印刷感 / 打印 PDF / 异步阅读 / 编辑风 / Fraunces / 暗夜风 / dark botanical / 高端品牌 / lookbook / 笔记本风 / notebook / hobonichi / 手账 / Bold Signal / 大字 / 橙色焦点 / demo day / 终端风 / terminal / 黑客 / 极客 talk / 代码 demo / 把 PPTX 转成网页 / 部署到我自己域名 / 手绘笔记 / sketchnote / 草图 / 白板讲解 / IDEO 风 / 手抖墨线 / sticky note / 便签 / 多幕动画 / step-by-step animation / 左讲右演 / 边讲边演 / pipeline 可视化 / 状态机动图 / 协议握手演示"。不适合：大量表格数据、培训课件、需要多人协作编辑的场景。
 ---
 
 # Dairui PPT
@@ -97,7 +97,34 @@ description: Use when the user wants to generate a single-file HTML PPT/deck for
 - 模板：`assets/template-terminal.html` · 排版规范：`references/layouts-terminal.md`
 - 美学锚点：90s BBS / Linux TTY / VS Code / Neovim 全屏 demo
 
-**九种风格共享**：单文件 HTML，无需服务器，浏览器直接打开即可。A/B/E/F/G/H/I 是交互演讲格式（横向翻页），C 是导图演讲格式（纵向前序展开），D 是打印阅读格式（PDF 出稿）。
+### 风格 J · 手绘笔记（Sketchnote）
+
+- **米色方格纸背景 + 暖光晕 + 内阴影** = 翻开的笔记本纸感
+- **手抖墨线**：SVG `feTurbulence + feDisplacementMap` 滤镜把方块/圆/箭头变成"随手画的"
+- **Kalam（印刷体手写英文，300/400/700）+ LXGW WenKai（中文笔锋楷书，自托管 CDN）+ JetBrains Mono**——只用 3 个字体，靠字重做层级
+- **高光记号笔色重定义 `<b>` `<u>` `<em>`**：粉/青/黄三色 highlighter
+- **sticky note + 胶带角 + 微旋转 (-1.5°~+1.5°)**——手贴上去的不规整感
+- 关键组件：page-card 笔记纸 / sticky 便签（5 种位置）/ tape 胶带角 / numbered notes / wobble SVG rect / 高光 strokes
+- 适合：解释复杂技术系统 / 设计思考分享 / 内部 brown-bag / 草图气质的 demo
+- 不适合：正式发布会、表格密集型、要打印 PDF（应走 D）
+- 模板：`assets/template-sketchnote.html` · 排版规范：`references/layouts-sketchnote.md`
+- 美学锚点：IDEO design thinking 草图 / *Visual Meetings* / 白板讲解
+- ⚠ **大坑**：SVG `filter` / `stroke` 不能挂在含 `<text>` 的 `<g>` 上（会继承到文字成糊状）；单字重字体（Patrick Hand / Architects Daughter / Caveat 等）不要设 500/600 字重（合成粗体不可读）。完整避坑见 `references/layouts-sketchnote.md`。
+
+**十种风格共享**：单文件 HTML，无需服务器，浏览器直接打开即可。A/B/E/F/G/H/I/J 是交互演讲格式（横向翻页），C 是导图演讲格式（纵向前序展开），D 是打印阅读格式（PDF 出稿）。
+
+## 跨风格 · 多幕动画演示 pattern
+
+如果要做**有时序的动态演示**（讲一个 pipeline、状态机、协议握手），可以套用 `references/animation-multi-scene.md` 描述的 pattern：
+
+- **左讲右演** 布局：左 38% 解说卡片 + 右 62% 舞台（SVG 动画）
+- **顶部进度点 + 底部播放控件**：◀/▶/⏸/⟲/速度切换，键盘空格/←→/R
+- **每幕独立 SVG**，自动播放 + crossfade 切换，单幕 3-6s，总长 ≤ 30s
+- **场景引擎**：每幕一个 `init()` + `animate(t)` 函数，`t` 从 0 跑到 1
+- **响应式**：小屏堆叠成上下，不要同时显示所有幕
+- 这个 pattern **不挑风格**——可以套在 B（瑞士）/ I（终端）/ J（sketchnote）任何一个上。
+
+最推荐组合：**风格 J + 多幕动画 = 边讲边画的动态系统讲解**。
 
 ## 何时使用
 
@@ -147,7 +174,8 @@ python <SKILL_ROOT>/scripts/extract-pptx.py <input.pptx> <output_dir>
 
 | # | 问题 | 为什么要问 |
 |---|------|-----------|
-| 1 | **风格 A-I 选一种**：A 杂志 / B 瑞士 / C 导图 / D 纸 / E 编辑 / F 暗夜植物 / G 笔记本 / H Bold Signal / I 终端。如果用户说不清，启动 **Style Discovery**——见 `references/style-discovery.md` | **必须先确定**，决定模板和后续工作流 |
+| 1 | **风格 A-J 选一种**：A 杂志 / B 瑞士 / C 导图 / D 纸 / E 编辑 / F 暗夜植物 / G 笔记本 / H Bold Signal / I 终端 / J 手绘笔记。如果用户说不清，启动 **Style Discovery**——见 `references/style-discovery.md` | **必须先确定**，决定模板和后续工作流 |
+| 1.5 | **要不要做动态演示？**（多幕动画 pattern：左讲右演 + 自动播放）。如果要讲有时序的 pipeline / 状态机 / 协议，套这个 pattern——见 `references/animation-multi-scene.md` | 这是表达方式，不挑风格，可以叠在任何风格上 |
 | 2 | **受众是谁？分享场景？**（行业内部 / 商业发布 / demo day / 私享会） | 决定语言风格和深度 |
 | 3 | **分享时长？** | A/B：15 分钟 ≈ 10 页，30 分钟 ≈ 20 页；C：按节点数算，每节点约 30-60 秒；D 是阅读格式，按内容密度算 |
 | 4 | **有没有原始素材？**（文档 / 数据 / 旧 PPT / 文章链接） | 有素材就基于素材，没有就帮他搭 |
@@ -291,9 +319,14 @@ cp "<SKILL_ROOT>/assets/template-signal.html" "项目/XXX/ppt/index.html"
 
 # 风格 I · 终端
 cp "<SKILL_ROOT>/assets/template-terminal.html" "项目/XXX/ppt/index.html"
+
+# 风格 J · 手绘笔记
+cp "<SKILL_ROOT>/assets/template-sketchnote.html" "项目/XXX/ppt/index.html"
 ```
 
-九个模板都是**完整可运行**的单 HTML 文件。**九种风格不能混用**——CSS 类名和结构都不一样。一份 deck 只能选一套。
+十个模板都是**完整可运行**的单 HTML 文件。**十种风格不能混用**——CSS 类名和结构都不一样。一份 deck 只能选一套。
+
+> 若用户要做**多幕动画演示**（左讲右演 + 自动播放），先选定上面任一风格，再叠加 `references/animation-multi-scene.md` 描述的 pattern——动画 pattern 不替换模板，是补充交互层。
 
 #### 2.1 · 必改占位符（**容易漏**）
 
@@ -310,6 +343,7 @@ cp "<SKILL_ROOT>/assets/template-terminal.html" "项目/XXX/ppt/index.html"
 | G | `<title>[必填] 替换为笔记本风 PPT 标题 · Notebook Deck Title</title>` | 实际 deck 标题 |
 | H | `<title>[必填] 替换为 Bold Signal PPT 标题 · Bold Signal Deck Title</title>` | 实际 deck 标题 |
 | I | `<title>[必填] 替换为终端风 PPT 标题 · Terminal Green Deck Title</title>` | 实际 deck 标题 |
+| J | `<title>[必填] 替换为 sketchnote PPT 标题 · Sketchnote Deck Title</title>` | 实际 deck 标题 |
 
 每次拷贝完一定要 grep 一下 `[必填]` 确认全部替换。
 
@@ -324,6 +358,7 @@ cp "<SKILL_ROOT>/assets/template-terminal.html" "项目/XXX/ppt/index.html"
 - **风格 G**：内置暗灰外底 + 奶纸 + 6 色 tab（mint/lavender/pink/sky/cream/peach），**不接受自定义**
 - **风格 H**：内置暗灰渐变 + 鲜橙 `#FF5722` + amber `#FFC107`，**不接受自定义**
 - **风格 I**：内置 GitHub 暗 `#0d1117` + 终端绿 `#39d353` + 标准语法高亮色板，**不接受自定义**
+- **风格 J**：内置米色方格纸 `#fbf9f0` + 蓝格线 + 4 色墨笔（蓝/红/绿/橙）+ 3 色 highlighter（黄/粉/青），**不接受自定义**
 
 A/B 的硬规则：
 - 一份 deck 只用一套主题，不要中途换色
@@ -624,6 +659,7 @@ dairui-ppt/
 │   ├── template-notebook.html  ← 风格 G · 笔记本模板（Bodoni Moda + 彩色 tab）
 │   ├── template-signal.html    ← 风格 H · Bold Signal 模板（Archivo Black + 橙焦点）
 │   ├── template-terminal.html  ← 风格 I · 终端模板（JetBrains Mono only）
+│   ├── template-sketchnote.html ← 风格 J · 手绘笔记模板（Kalam + LXGW WenKai + wobble SVG）
 │   └── motion.min.js           ← Motion One 本地副本（A/B 离线兜底，约 64KB）
 ├── scripts/
 │   ├── validate-swiss-deck.mjs ← 风格 B 静态校验
@@ -650,6 +686,8 @@ dairui-ppt/
     ├── layouts-notebook.md   ← 风格 G · 笔记本版式 + tab 导航 + sticky note
     ├── layouts-signal.md     ← 风格 H · Bold Signal 版式 + 12 列 grid + 橙焦点
     ├── layouts-terminal.md   ← 风格 I · 终端版式 + 语法高亮 + ASCII art
+    ├── layouts-sketchnote.md ← 风格 J · 手绘笔记版式 + wobble 滤镜 + 字重避坑
+    ├── animation-multi-scene.md ← 跨风格 · 多幕动画 pattern（左讲右演 + 自动播放）
     ├── themes.md             ← 风格 A · 5 套主题色预设
     ├── themes-swiss.md       ← 风格 B · 4 套瑞士风主题色预设
     ├── image-prompts.md      ← 配图类型、比例和提示词（A/B 共用，C 在 layouts-mindmap.md 末尾）
@@ -660,7 +698,7 @@ dairui-ppt/
 
 1. 先读完 `SKILL.md`（这个文件）了解整体
 2. **必读三件套**：`references/anti-ai-slop.md` + `references/viewport-rules.md` + `references/animation-patterns.md`——所有风格通用
-3. Step 1 第一问确定风格 A / B / C / D / E / F / G / H / I；如果用户说不清，读 `references/style-discovery.md` 启动 Show-don't-tell 流程
+3. Step 1 第一问确定风格 A / B / C / D / E / F / G / H / I / J；如果用户说不清，读 `references/style-discovery.md` 启动 Show-don't-tell 流程
 4. **动手前 Read 对应模板**：
    - A → `assets/template-magazine.html` 的 `<style>` 块
    - B → `assets/template-swiss.html` 的 `<style>` 块
@@ -671,7 +709,9 @@ dairui-ppt/
    - G → `assets/template-notebook.html` 看 page card + tabs 结构
    - H → `assets/template-signal.html` 看 12 列 grid + signal-card 结构
    - I → `assets/template-terminal.html` 看 titlebar + 代码块语法高亮 class
-5. 读对应布局/内容规范：A→`themes.md`+`layouts.md`；B→`themes-swiss.md`+**先 `swiss-layout-lock.md`**+`layouts-swiss.md`；C→`layouts-mindmap.md`；D→`layouts-paper.md`；E→`layouts-editorial.md`；F→`layouts-botanical.md`；G→`layouts-notebook.md`；H→`layouts-signal.md`；I→`layouts-terminal.md`
+   - J → `assets/template-sketchnote.html` 看 wobble filter 定义 + page-card / sticky / numbered-notes / code-anno 7 种版式
+5. 读对应布局/内容规范：A→`themes.md`+`layouts.md`；B→`themes-swiss.md`+**先 `swiss-layout-lock.md`**+`layouts-swiss.md`；C→`layouts-mindmap.md`；D→`layouts-paper.md`；E→`layouts-editorial.md`；F→`layouts-botanical.md`；G→`layouts-notebook.md`；H→`layouts-signal.md`；I→`layouts-terminal.md`；J→**先 `layouts-sketchnote.md`**（强制先读避坑清单：filter/stroke 不能挂 group + 字重 500/600 在单字重字体上不存在）
+6. 如果要做**多幕动画演示**：读 `references/animation-multi-scene.md`，把 pattern 套到选定的风格上（动画 pattern 不替换模板，是叠加交互层）
 6. 配图时读 `image-prompts.md`（A/B/E/H 共用）或 mindmap prompt（C）；D/F/I 通常不配大量图，G 配 sticky 风格
 7. 用户需要浏览器内编辑：`node scripts/add-editing.mjs index.html`，配 `references/inline-editing.md`
 8. 用户要分享 / 部署：`references/deploy.md` → Vercel 或 Cloudflare Workers
