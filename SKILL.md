@@ -113,6 +113,8 @@ description: Use when the user wants to generate a single-file HTML PPT/deck for
 
 **十种风格共享**：单文件 HTML，无需服务器，浏览器直接打开即可。A/B/E/F/G/H/I/J 是交互演讲格式（横向翻页），C 是导图演讲格式（纵向前序展开），D 是打印阅读格式（PDF 出稿）。
 
+**横向翻页风格（A/B/E/F/G/H/I/J）默认带 URL hash 路由**：当前页同步到 `location.hash`（`#3` = 第 3 页，1-indexed），刷新/分享链接/浏览器前后退都能回到当前页。模板里 `go()` 已包裹好，无需自己接线；只是写自定义导航逻辑时不要绕开 `go()`，否则 hash 不会更新。也接受 `#/3` 和 `#slide=3` 两种格式。
+
 ## 跨风格 · 多幕动画演示 pattern
 
 如果要做**有时序的动态演示**（讲一个 pipeline、状态机、协议握手），可以套用 `references/animation-multi-scene.md` 描述的 pattern：
