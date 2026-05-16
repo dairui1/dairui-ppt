@@ -1,11 +1,17 @@
 ---
 name: dairui-ppt
-description: Use when the user wants to generate a single-file HTML PPT/deck for a sharing session, demo day, internal talk, project report, white paper, annual recap, equity research, investor memo, editorial article, brand lookbook, hackathon demo, dev talk, sketchnote-style system explainer, animated technical demo, or anything that should be "做完直接发，不用翻页工具"。Triggers on "做 PPT / 做 deck / 网页 PPT / 演讲 / 分享 / 发布会 / 路演 / 一次做完 / horizontal swipe deck"，更具体地"杂志风 / Monocle 感 / 瑞士风 / Swiss Style / Helvetica / 极简数据 / 思维导图 / mindmap / 脑图 / 把文章讲成 PPT / 纸风格 / 白皮书 / 印刷感 / 打印 PDF / 异步阅读 / 编辑风 / Fraunces / 暗夜风 / dark botanical / 高端品牌 / lookbook / 笔记本风 / notebook / hobonichi / 手账 / Bold Signal / 大字 / 橙色焦点 / demo day / 终端风 / terminal / 黑客 / 极客 talk / 代码 demo / 把 PPTX 转成网页 / 部署到我自己域名 / 手绘笔记 / sketchnote / 草图 / 白板讲解 / IDEO 风 / 手抖墨线 / sticky note / 便签 / 多幕动画 / step-by-step animation / 左讲右演 / 边讲边演 / pipeline 可视化 / 状态机动图 / 协议握手演示"。不适合：大量表格数据、培训课件、需要多人协作编辑的场景。
+description: Use when the user asks for PPT, deck, 网页 PPT, 演讲, 分享, 路演, demo day, 报告, 白皮书, sketchnote, or animated demo slides.
 ---
 
 # Dairui PPT
 
 ## 这个 Skill 做什么
+
+当用户要做 PPT、deck、网页 PPT、演讲、分享、发布会、路演、demo day、内部 talk、项目报告、白皮书、年度总结、研报、投资人 memo、品牌 lookbook、技术 demo、手绘笔记、动态系统讲解，或明确说"一次做完 / 做完直接发 / 不用翻页工具"时使用。
+
+更具体的触发词包括：杂志风 / Monocle 感 / 瑞士风 / Swiss Style / Helvetica / 极简数据 / 思维导图 / mindmap / 脑图 / 把文章讲成 PPT / 纸风格 / 打印 PDF / 异步阅读 / 编辑风 / Fraunces / 暗夜植物 / dark botanical / 高端品牌 / 笔记本风 / notebook / hobonichi / 手账 / Bold Signal / 大字 / 橙色焦点 / 终端风 / terminal / 黑客 / 极客 talk / PPTX 转网页 / 部署到域名 / sketchnote / 草图 / 白板讲解 / IDEO 风 / sticky note / 便签 / 多幕动画 / step-by-step animation / 左讲右演 / pipeline 可视化 / 状态机动图 / 协议握手演示。
+
+不适合：大量表格数据、培训课件、需要多人协作编辑的场景。
 
 生成一份**单文件 HTML**演示文稿，九种可选的视觉/交互形态：
 
